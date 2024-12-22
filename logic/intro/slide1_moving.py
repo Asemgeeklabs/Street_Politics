@@ -26,7 +26,7 @@ speed9 = 200
 speed10 = 150
 speed11 = 100
 #### background image speed ####
-background_image_speed = 10
+background_image_speed = 20
 ## common height ##
 ## Define motion function (of comma) to match the video's speed
 def effect_transition(t, x, y  ,total_distance=None):

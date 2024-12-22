@@ -14,7 +14,7 @@
             },
             {
                 "title": "Canada's Governance Fatigue",
-                "audioPath": "https://machine-genius.s3.amazonaws.com/My_Audios/audio-S3-1734857452373.mp3",
+                "audioPath": "https://machine-genius.s3.amazonaws.com/My_Audios/audio-S1-1734857457171.mp3",
                 "duration": 7.967313,
                 "start_time": 13.191812,
                 "images": [
@@ -26,7 +26,7 @@
             },
             {
                 "title": "Indictment of Trudeau's",
-                "audioPath": "https://machine-genius.s3.amazonaws.com/My_Audios/audio-S2-1734857462167.mp3",
+                "audioPath": "https://machine-genius.s3.amazonaws.com/My_Audios/audio-S1-1734857457171.mp3",
                 "duration": 9.012187,
                 "start_time": 21.159125,
                 "images": [
