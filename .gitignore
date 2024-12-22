@@ -1,0 +1,5 @@
+# Virtual environments
+venv/
+downloads/
+db.sqlite3
+.env
