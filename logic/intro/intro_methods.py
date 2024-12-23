@@ -94,7 +94,7 @@ def Slide3(image_path,text,start,duration):
         bg_color=None, 
         margin=(150,10) ,
     )
-    text = text.with_position(lambda t: text_moving(t,text.w,text_height=text.h,duration=duration)).with_duration(duration+10).with_start(start+4)
+    text = text.with_position(lambda t: text_moving(t,text.w,text_height=text.h,duration=duration)).with_duration(duration+10).with_start(start+5)
     bg_color2 = ColorClip(size=(text.w+400,text.h+50), color=(0, 0, 0))
     bg_color2 = bg_color2.with_position(lambda t :bg_move(t,width=bg_color2.w,height=bg_color2.h,duration=duration)).with_duration(duration+10).with_start(start+4)
     #### rectamgular around text ####
