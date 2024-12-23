@@ -185,6 +185,7 @@ def bg_move(t,width,height,duration):
 def text_moving(t,text_width,text_height,duration):
     if t < 0 :
         return (1920,"center")
+    
     elif 0 <= t < 1:
         offset = 1920
         return (offset-(t*((text_width*0.4)+200)),"center")
