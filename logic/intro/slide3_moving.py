@@ -148,12 +148,6 @@ with open(local_filename, "wb") as file:
 """
 # ### method of converting image to red RGB ###
 def Red_image(path):
-    ### download image ###
-    # path = download_image(url=path)
-    ## download image ##
-    # response = requests.get(path)
-    # image_data = BytesIO(response.content)
-    # Open the image
     image = Image.open(path)
     # Ensure the image is in RGB mode
     image = image.convert("RGB")
