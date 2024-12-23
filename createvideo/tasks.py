@@ -2,6 +2,7 @@ from celery import shared_task
 from logic.intro.intro_methods import *
 from .MainMethod import body
 from django.conf import settings
+from io import BytesIO
 
 ### list of all slide methods ###
 methods_list = [Slide1,Slide2,Slide3,Slide4]
@@ -43,8 +44,11 @@ def bodytest(slides_list,body_list,webhook):
         duration = slide["duration"]
         start = slide["start_time"]
         image_url = slide["images"][0]["url"]
+        ## download image ##
+        response = requests.get(image_url)
+        image_data = BytesIO(response.content)
         ### create slide content ###
-        componant = methods_list[index](image_path=image_url,duration=duration,text=text,start=start)
+        componant = methods_list[index](image_path=image_data,duration=duration,text=text,start=start)
         list_componant.extend(componant)
         list_audios.append((audio_url,start))
     list_audios_instance = add_audios(list_audios)

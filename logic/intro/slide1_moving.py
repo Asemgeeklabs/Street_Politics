@@ -1,12 +1,20 @@
 from moviepy import *
+import requests
 
 def add_audios(audios):
     ## audios creating ##
     list_audios = []
     ## looping on all audios ##
+    local_filename = f"downloads/sample.mp3"
     for url , start in audios:
+        response = requests.get(url, stream=True) 
+        response.raise_for_status()  
+        with open(local_filename, "wb") as file:
+            for chunk in response.iter_content(chunk_size=8192):  
+                file.write(chunk)
+        audio = AudioFileClip(local_filename)
         print(f"start:{start}")
-        audio = AudioFileClip(url).with_start(start)
+        audio = audio.with_start(start)
         list_audios.append(audio)
     return list_audios
 
