@@ -9,7 +9,7 @@ from datetime import datetime
 methods_list = [Slide1,Slide2,Slide3,Slide4]
 
 #### body creating method ###
-def body(body_list,clips,audio_clips):
+def body(body_list,clips,audio_clips,video_name):
     ### start of back ground video and logo ###
     start_log_bg = body_list[0]["start_time"]
     ### create background video ###
@@ -47,14 +47,17 @@ def body(body_list,clips,audio_clips):
     ### add logo ###
     logo_image = ImageClip("downloads/logo.png").resized(width=150).with_position((1740,20)).with_duration(background_video_repeated.duration).with_start(start_log_bg)
     clips.append(logo_image)
+    ### add outro ###
+    outro = VideoFileClip("downloads/outro.mp4").with_start(body_list[-1]["start_time"]+body_list[-1]["duration"])
+    clips.append(outro)
     video = CompositeVideoClip([background_video_repeated] + clips)
     ### add audio ###
     final_audio = CompositeAudioClip(audio_clips)
     ### add audio to video ###
     video = video.with_audio(final_audio)
-    output_path = "downloads/final_endpoint.mp4"
+    output_path = f"downloads/{video_name}_.mp4"
     video.write_videofile(output_path, fps=30)
-    path = upload_to_s3("downloads/final_endpoint.mp4", f"street_politics/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}")
+    path = upload_to_s3(output_path, f"street_politics/{video_name}")
     return path
 
 def upload_to_s3(file_path, s3_path):

@@ -1,26 +1,7 @@
 from celery import shared_task
 from logic.intro.intro_methods import *
 from .MainMethod import body
-# from logic.content.Add_borders import add_borders_and_resize
-# from logic.content.edit_image import process_image
-# from logic.content.Rebeat_background import repeat_video
-# from logic.content.Shadow import add_drop_shadow
-# from logic.content.Video_Edit import process_video_frame_by_frame
-
-""""
-{
-                "title": "Canadians Shocked & Disheartened",
-                "audioPath": "https://machine-genius.s3.amazonaws.com/My_Audios/audio-S1-1731309711178.mp3",
-                "duration": 13.5575,
-                "start_time": 0,
-                "images": [
-                    {
-                        "url": "https://dl.claid.ai/d45ed157-ee05-4956-8788-a7c8263df2ea/CanadaDay-1000x600-1.jpeg",
-                        "pause_duration": 0
-                    }
-                ]
-            },
-"""
+from django.conf import settings
 
 ### list of all slide methods ###
 methods_list = [Slide1,Slide2,Slide3,Slide4]
@@ -43,16 +24,16 @@ def intro_create(slides_list):
         list_audios.append((audio_url,start))
     list_audios_instance = add_audios(list_audios)
     return list_audios_instance , list_componant
-    # final_video = CompositeVideoClip(list_componant,size=(video_width, video_height))
-    # mixed_audios = CompositeAudioClip(list_audios_instance)
-    # final_video = final_video.with_audio(mixed_audios)
-    # ## Write the video to a file ##
-    # output_file = "downloads/final_test_intro.mp4"
-    # final_video.write_videofile(output_file, fps=60)
-    # return output_file 
 
 @shared_task
-def bodytest(slides_list,body_list):
+def bodytest(slides_list,body_list,webhook):
+    ### parse webhook data ###
+    webhook_url = webhook["url"]
+    meta_data = webhook["metadata"]
+    user_id = meta_data["_id"]
+    user_email = meta_data["employee"]
+    user_name =  user_email.split('@')[0]
+    video_name = user_name + user_id
     list_componant = []
     list_audios = []
     for index , slide in enumerate(slides_list):
@@ -68,5 +49,22 @@ def bodytest(slides_list,body_list):
         list_audios.append((audio_url,start))
     list_audios_instance = add_audios(list_audios)
     ### start body process ###
-    body(body_list=body_list,clips=list_componant,audio_clips=list_audios_instance)
+    path = body(body_list=body_list,clips=list_componant,audio_clips=list_audios_instance,video_name=video_name)
+    url =  settings.MEDIA_URL + path
+    payload = {
+        "url": url,
+        "metadata" : meta_data
+    }
+    try:
+        response = requests.post(webhook_url, json=payload)
+        print("webhood done!")
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred while sending video notification: {e}")
 
+@shared_task
+def testsss(image_url,text,duration):
+    response = Slide4(image_path=image_url,text=text,start=0,duration=duration)
+    video = CompositeVideoClip(response)
+    output_path = f"downloads/testslide4_.mp4"
+    video.write_videofile(output_path, fps=30)
+    

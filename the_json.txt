@@ -1,34 +1,42 @@
-"template": {
+{
+    "webhock": {
+        "url": "https://api-development.machinegenius.io/un-authorized/video_status",
+        "metadata": {
+            "_id": "67681bb44608ea7382eb7a9a",
+            "employee": "Mohamed@gmail.com"
+        }
+    },
+    "response": {
         "slides": [
             {
                 "title": "Future Political Implications",
-                "audioPath": "https://machine-genius.s3.amazonaws.com/My_Audios/audio-S4-1734857439448.mp3",
-                "duration": 13.191812,
+                "audioPath": "https://machine-genius.s3.amazonaws.com/My_Audios/audio-S1-1734857457171.mp3",
+                "duration": 19.644063,
                 "start_time": 0,
                 "images": [
                     {
-                        "url": "https://dl.claid.ai/7c357007-19a7-45d3-98a0-d4ad160a71e1/800px-Jordan_Peterson_by_Gage_Skidmore.jpeg",
+                        "url": "https://dl.claid.ai/b745fbc8-3b61-44f7-9bb8-840ec763c1ed/image.jpeg",
                         "pause_duration": 0
                     }
                 ]
             },
             {
-                "title": "Canada's Governance Fatigue",
+                "title": "Canada's Governance",
                 "audioPath": "https://machine-genius.s3.amazonaws.com/My_Audios/audio-S1-1734857457171.mp3",
-                "duration": 7.967313,
-                "start_time": 13.191812,
+                "duration": 19.644063,
+                "start_time": 19.644063,
                 "images": [
                     {
                         "url": "https://dl.claid.ai/f944ffd5-2186-4dae-8d8b-c4e8dc6fbdf8/1200px-Flag_of_Canada_%28Pantone%29.svg.jpeg",
-                        "pause_duration": 13.191812
+                        "pause_duration": 19.644063
                     }
                 ]
             },
             {
                 "title": "Indictment of Trudeau's",
-                "audioPath": "https://machine-genius.s3.amazonaws.com/My_Audios/audio-S1-1734857457171.mp3",
-                "duration": 9.012187,
-                "start_time": 21.159125,
+                "audioPath": ""https://machine-genius.s3.amazonaws.com/My_Audios/audio-S3-1734857452373.mp3",
+                "duration": 19.644063,
+                "start_time": 39.288126,
                 "images": [
                     {
                         "url": "https://dl.claid.ai/05a1f389-546f-49b7-92e5-1cdef22f513b/640px-Prime_Minister_Trudeau%27s_message_on_Christmas_2023_%280m29s%29_%28cropped%29.jpeg",
@@ -40,7 +48,7 @@
                 "title": "Peterson's Momentous Claim",
                 "audioPath": "https://machine-genius.s3.amazonaws.com/My_Audios/audio-S1-1734857457171.mp3",
                 "duration": 19.644063,
-                "start_time": 30.171312,
+                "start_time": 58.932189 ,
                 "images": [
                     {
                         "url": "https://dl.claid.ai/7c357007-19a7-45d3-98a0-d4ad160a71e1/800px-Jordan_Peterson_by_Gage_Skidmore.jpeg",
@@ -53,19 +61,11 @@
             {
                 "audioPath": "https://machine-genius.s3.amazonaws.com/My_Audios/audio-0-1734857546814.mp3",
                 "duration": 7.10525,
-                "start_time": 58.815375,
+                "start_time": 78.576252,
                 "images": [
                     {
                         "url": "https://dl.claid.ai/436ab32e-a580-4235-9310-018722193130/640px-Prime_Minister_Trudeau%27s_message_on_Christmas_2023_%280m29s%29_%28cropped%29.jpeg",
-                        "pause_duration": 58.815375
-                    },
-                    {
-                        "url": "https://dl.claid.ai/60475de7-0baf-4019-af51-1000c087027b/PM_Web_Photos_Colour_EN.jpeg",
-                        "pause_duration": 65.920625
-                    },
-                    {
-                        "url": "https://dl.claid.ai/379392c4-2311-43fe-a626-16df438f58f2/34cda0c59de643779a8e2bfae1f69544.jpeg",
-                        "pause_duration": 65.920625
+                        "pause_duration": 7.10525
                     }
                 ]
             },
@@ -83,7 +83,7 @@
                         "pause_duration": 75.847125
                     },
                     {
-                        "url": "https://dl.claid.ai/6fbb8296-d836-48b5-b49c-0bf58ec5318a/21canada-trudeau-explainer-fvmk-articleLarge.jpeg",
+                        "url": "https://dl.claid.ai/cb587f28-c046-4369-90e6-989c5c5c10b7/20canada-trudeau-government-qvjc-articleLarge.jpeg",
                         "pause_duration": 75.847125
                     }
                 ]
@@ -101,8 +101,13 @@
                     {
                         "url": "https://dl.claid.ai/944a53b4-e50f-4c58-832d-5b4c9c9d0fbe/800px-Jordan_Peterson_by_Gage_Skidmore.jpeg",
                         "pause_duration": 112.86712500000002
+                    },
+                    {
+                        "url": "https://dl.claid.ai/62834482-67cd-400d-8ef3-20a9adb14d59/hp2-jordan-peterson-gq-29oct18-nigel-parry_b.jpeg",
+                        "pause_duration": 120.33812500000002
                     }
                 ]
             }
         ]
     }
+}

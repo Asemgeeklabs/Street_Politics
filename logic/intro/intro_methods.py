@@ -87,14 +87,14 @@ def Slide3(image_path,text,start,duration):
     text = TextClip(
         # text="winter is here".upper(),  
         text=text.upper(),  
-        font_size= 70,          
+        font_size= 60,          
         size = (500,200),
         color="white", 
         font="downloads/Helvetica-Bold.ttf",
         bg_color=None, 
         margin=(150,10) ,
     )
-    text = text.with_position(lambda t: text_moving(t,text.w,text_height=text.h,duration=duration)).with_duration(duration+10).with_start(start+5)
+    text = text.with_position(lambda t: text_moving(t,text.w,text_height=text.h,duration=duration)).with_duration(duration+10).with_start(start+4)
     bg_color2 = ColorClip(size=(text.w+400,text.h+50), color=(0, 0, 0))
     bg_color2 = bg_color2.with_position(lambda t :bg_move(t,width=bg_color2.w,height=bg_color2.h,duration=duration)).with_duration(duration+10).with_start(start+4)
     #### rectamgular around text ####
@@ -148,13 +148,13 @@ def Slide4(image_path,text,start,duration):
         method = 'caption',
         interline= 30,
         horizontal_align="left",
-        margin=(150,10) ,
+        # margin=(50,10) ,
     ).with_position(lambda t : effect_transition2(t=t,x=340,y=3180,total_distance=(3180-400),slow_ratio=2.4)).with_start(start).with_duration(duration)
 
     ## internal text width of text4 ##
     internal_text_width = get_internal_text_width(text=text4)
     #### text color base ####
-    text_base_color = ColorClip((internal_text_width,20),color=(170,36,30)).with_position(lambda t : effect_transition2(t=t,x=340,y=3180,total_distance=(3180-(350+text4.h)),slow_ratio=2.5)).with_start(start).with_duration(duration)
+    text_base_color = ColorClip((internal_text_width,20),color=(170,36,30)).with_position(lambda t : effect_transition2(t=t,x=340,y=3180,total_distance=(3180-(350+text4.h+50)),slow_ratio=2.5)).with_start(start).with_duration(duration)
     ### intro clip of street politics ###
     intro = VideoFileClip("downloads/Street_Politics_intro.mov", has_mask=True,target_resolution=(1920,1080)).with_start(start+(duration-2))
     return [gray_background, left_layer_gray,middle_layer_gray,right_layer_offwhite,right_layer_lightgray,left_layer_black,

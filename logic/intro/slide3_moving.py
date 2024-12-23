@@ -193,7 +193,7 @@ def text_moving(t,text_width,text_height,duration):
     elif 1 <= t <= 7:
         offset = 1920-((text_width)*0.4)-200
         return (offset-((t-1)*(text_width)*0.1),"center")
-    elif 7 < t <= (duration-5):
+    elif 7 < t <= (duration-4):
         offset = 1920-(text_width+200)
         return (offset,"center")
     else:

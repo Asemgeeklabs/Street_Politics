@@ -22,9 +22,20 @@ class BodySerializer(serializers.Serializer):
     images = ImagesSerializer(many=True,required=False)
 
 ### serializer for template ###
-class TemplateSerializer(serializers.Serializer):
+class ResponseSerializer(serializers.Serializer):
     slides = SlidesSerializer(many=True)
     body = BodySerializer(many=True)
 
+class MetadataSerializer(serializers.Serializer):
+    _id = serializers.CharField()
+    employee = serializers.EmailField()
 
+# Webhook Serializer
+class WebhockSerializer(serializers.Serializer):
+    url = serializers.URLField()
+    metadata = MetadataSerializer()
 
+### main template ###
+class TemplateSerializer(serializers.Serializer):
+    webhock = WebhockSerializer() 
+    response = ResponseSerializer()

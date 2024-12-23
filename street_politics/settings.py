@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-20nh#8ur*c27zcmrqr95(wahd*%o6m13n3y^73!%otf-@x8iw(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -144,5 +144,5 @@ AWS_S3_OBJECT_PARAMETERS = {
 } 
 
 ### celery config ###
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
