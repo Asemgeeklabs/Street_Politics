@@ -69,7 +69,7 @@ def body(body_list,clips,audio_clips,video_name):
     ### APPEND CLIPS of body to clips of intro ###
     clips.append(background_video_repeated)
     clips.extend(clips2)
-    video = CompositeVideoClip(clips)
+    video = CompositeVideoClip(clips,size=(1920,1080))
     ### add audio ###
     final_audio = CompositeAudioClip(audio_clips)
     ### add audio to video ###
