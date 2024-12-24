@@ -14,7 +14,7 @@ def body(body_list,clips,audio_clips,video_name):
     ### start of back ground video and logo ###
     start_log_bg = body_list[0]["start_time"]
     ### create background video ###
-    bg_video = VideoFileClip("downloads/background.mp4").with_start(start_log_bg)
+    bg_video = VideoFileClip("downloads/background.mp4")
     w, h = bg_video.size
     speed = 800 
     total_duration = 0
@@ -61,6 +61,7 @@ def body(body_list,clips,audio_clips,video_name):
             audio = AudioFileClip(local_filename).with_start(new_start_time)
             audio_clips.append(audio)
     ## modify the duration of background video ##
+    print(f"first total duration:{total_duration}")
     print(f"total duration:{real_total_duration}")
     background_video_repeated = repeat_video(video=bg_video, total_duration=real_total_duration,start=start_log_bg)
     print(f"back ground video duration:{background_video_repeated.duration}")
