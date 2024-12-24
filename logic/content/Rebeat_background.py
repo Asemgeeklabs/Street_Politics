@@ -1,7 +1,7 @@
 import math 
 from moviepy import *
 
-def repeat_video(video,total_duration):
+def repeat_video(video,total_duration,start):
     video_duration = video.duration
     if video_duration > total_duration:
         total_video = video.subclipped(0,total_duration)
@@ -15,7 +15,7 @@ def repeat_video(video,total_duration):
                 video
                 .with_position((0,0))
                 .resized(width=1920)
-                .with_start(number*video_duration)
+                .with_start((number*video_duration)+start)
                 .with_duration(video_duration)
                 .with_fps(30)
                 )

@@ -1,7 +1,9 @@
 from moviepy import *
 from PIL import Image 
 import requests
-from io import BytesIO
+# from io import BytesIO
+# import os
+# import cairosvg
 
 ## method for transition from bottom to top smoothly ##
 def effect_transition(t, x, y ,total_distance=None , slow_ratio=1):
@@ -125,6 +127,43 @@ def sliding_move(t, start, y, total_distance=1920):
         return (start - offset, y)
 
 ### method to download image by url ###
+# def download_image(url, filename=None):
+#     # Default path for saving images
+#     if filename is None:
+#         filename = "downloads/red_image_downloaded.jpg"
+    
+#     # Check the extension from the URL
+#     ext = os.path.splitext(url)[1].lower()
+#     if ext == '.svg':
+#         # Ensure the output filename ends with .png
+#         filename = os.path.splitext(filename)[0] + '.png'
+
+#     # Send a GET request to the URL
+#     print("before request image>>>>>>>>>>")
+#     response = requests.get(url)
+
+#     # Check if the request was successful
+#     if response.status_code == 200:
+#         print("Image request success!!!!")
+
+#         if ext == '.svg':
+#             # Convert SVG to PNG
+#             try:
+#                 print("Converting SVG to PNG...")
+#                 cairosvg.svg2png(bytestring=response.content, write_to=filename)
+#                 print(f"SVG converted and saved as {filename}")
+#             except Exception as e:
+#                 print(f"Failed to convert SVG to PNG: {e}")
+#         else:
+#             # Save non-SVG image content to a file
+#             with open(filename, "wb") as file:
+#                 file.write(response.content)
+#             print(f"Image downloaded and saved as {filename}")
+#     else:
+#         print(f"Failed to download image. Status code: {response.status_code}")
+
+#     return filename
+
 def download_image(url,filename=None):
     ### path that image saved on it ###
     if filename == None:
@@ -181,23 +220,53 @@ def bg_move(t,width,height,duration):
         offset = 1920-((width)*0.6)-((width)*0.4)
         return effect_transition(t=(t-(duration-4)),x=offset,y=(1080-height)//2,total_distance=1080)
 
-## text moving method ##
-def text_moving(t,text_width,text_height,duration):
-    if t < 0 :
-        return (1920,"center")
+def text_moving(t, text_width, text_height, duration):
+    if t < 0:
+        return (1920, "center")
     
-    elif 0 <= t < 1:
+    # Calculate durations for each segment
+    segment_duration = duration / 3.0  # Use float division
+    
+    if 0 <= t < segment_duration:
         offset = 1920
-        return (offset-(t*((text_width*0.4)+200)),"center")
-    elif 1 <= t <= 7:
-        offset = 1920-((text_width)*0.4)-200
-        return (offset-((t-1)*(text_width)*0.1),"center")
-    elif 7 < t <= (duration-5):
-        offset = 1920-(text_width+200)
-        return (offset,"center")
+        progress = t / segment_duration  # Progress as a fraction
+        return (offset - progress * ((text_width * 0.6) + 200), "center")
+    
+    elif segment_duration <= t <= 2 * segment_duration:
+        offset = 1920 - ((text_width) * 0.6) - 200
+        progress = (t - segment_duration) / segment_duration  # Progress in second segment
+        return (offset - progress * (text_width * 0.4), "center")
+    
+    elif 2 * segment_duration < t <= duration:
+        offset = 1920 - (text_width + 200)
+        return (offset, "center")
+    
     else:
-        offset = 1920-(text_width+200)
-        return effect_transition(t=(t-(duration-5)),x=offset,y=(1080-text_height)//2,total_distance=1080)
+        # Ensure `t - duration` does not exceed bounds for effect_transition
+        offset = 1920 - (text_width + 200)
+        return effect_transition(
+            t=(t - duration),
+            x=offset,
+            y=(1080 - text_height) // 2,
+            total_distance=1080
+        )
+    
+# def text_moving(t,text_width,text_height,duration):
+#     if t < 0 :
+#         return (1920,"center")
+    
+#     elif 0 <= t < 1:
+#         offset = 1920
+#         return (offset-(t*((text_width*0.4)+200)),"center")
+#     elif 1 <= t <= 7:
+#         offset = 1920-((text_width)*0.4)-200
+#         return (offset-((t-1)*(text_width)*0.1),"center")
+#     elif 7 < t <= (duration-5):
+#         offset = 1920-(text_width+200)
+#         return (offset,"center")
+#     else:
+#         offset = 1920-(text_width+200)
+#         return effect_transition(t=(t-(duration-5)),x=offset,y=(1080-text_height)//2,total_distance=1080)
 
 ### compination of slide effect then up effect ###
 def slide3Trans(t,start, y , x ,duration,horz_distance=1920,vert_distance=None , slow_ratio=1):

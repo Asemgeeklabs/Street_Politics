@@ -16,7 +16,12 @@ def Slide1(image_path,duration,text,start=0):
 
     intro_bg = intro_bg.with_duration(duration+6.5).with_position(lambda t  : move(t,common_height=((video_height - intro_bg.h) // 2),duration=duration)).with_start(0)
     ## image of back ground ##
-    background_image = ImageClip(image_path).resized(height=1280).with_position(lambda t : image_move(t,duration=duration,x_start=960,y_start=200)).with_duration(duration+6.5).with_start(start)
+    background_image = ImageClip(image_path)
+    ### check dimintions of image ###
+    if background_image.h > background_image.w:
+        background_image = background_image.resized(width=1920).with_position(lambda t : image_move(t,duration=duration,x_start=500,y_start=0)).with_duration(duration+6.5).with_start(start)
+    else:
+        background_image = background_image.resized(height=1280).with_position(lambda t : image_move(t,duration=duration,x_start=600,y_start=0)).with_duration(duration+6.5).with_start(start)
     #### add title text to video ####
     # check if text is longest than 25 charachter #
     if len(text) <= 40 :
@@ -50,13 +55,20 @@ def Slide2(image_path,text,duration,start):
     # second_image = ImageClip("downloads/hh.webp").resized(width=1920)
     second_image = second_image.with_start(start+0.5).with_duration(duration+8).with_position(lambda t : second_image_position(t=t,duration=duration,x=(get_postition(end_time=duration,distance=1920)),y=0)).resized(lambda t : zoom_in_effect(t,duration=duration))
     ## title 2 ##
+    # check if text is longest than 25 charachter #
+    if len(text) <= 20 :
+        font_size = 35
+        margin = (20,10)
+    else:
+        font_size = 20
+        margin = (30,10)
     second_title = TextClip(
         text=text.upper(),  
-        font_size= 35,  
+        font_size= font_size,  
         color='rgb(248,229,229)',      
         font="downloads/Helvetica-Bold.ttf", 
         bg_color= None, 
-        margin=(20,10) ,
+        margin=margin ,
     )
     ## Set the height to 200 and adjust the width proportionally
     second_title = second_title.resized(height=150)
@@ -72,29 +84,44 @@ def Slide2(image_path,text,duration,start):
 ################################################
 ############# function of slide 3 ##############
 def Slide3(image_path,text,start,duration):
-    slided_image = ImageClip(image_path).resized(height=1080)
-    ## first image ##
-    slided_image = slided_image.with_position(lambda t :slide3Trans(t,duration=duration,start=1920,y=0,x=0,vert_distance=1080)).with_duration(duration+8).with_start(start)
+    slided_image = ImageClip(image_path)
     ## convert image to red image ##
     second_image_path = Red_image(image_path)
-    # ## second red image ##
-    red_image = ImageClip(second_image_path).resized(height=1680).with_position(lambda t :slide3Trans(t=t,duration=duration,start=1920+slided_image.w,y=red_image_movement(t=t),x=slided_image.w,vert_distance=1080)).with_duration(duration+8).with_start(start)
+    ## first image ##
+    if slided_image.w >= slided_image.h: 
+        ## resize image ##
+        slided_image = slided_image.resized(height=1080)
+        ## crop ##
+        slided_image = slided_image.cropped(x1=0,y1=0,x2=900,y2=1080)
+        slided_image = slided_image.with_position(lambda t :slide3Trans(t,duration=duration,start=1920,y=0,x=0,vert_distance=1080)).with_duration(duration+8).with_start(start)
+        # ## second red image ##
+        red_image = ImageClip(second_image_path).resized(height=1680).cropped(x1=0,y1=0,x2=1020,y2=1680).with_position(lambda t :slide3Trans(t=t,duration=duration,start=1920+900,y=red_image_movement(t=t),x=900,vert_distance=1080)).with_duration(duration+8).with_start(start)
+    else:
+        slided_image = slided_image.resized(height=1080).with_position(lambda t :slide3Trans(t,duration=duration,start=1920,y=0,x=0,vert_distance=1080)).with_duration(duration+8).with_start(start)
+        # ## second red image ##
+        red_image = ImageClip(second_image_path).resized(height=1680).with_position(lambda t :slide3Trans(t=t,duration=duration,start=1920+slided_image.w,y=red_image_movement(t=t),x=slided_image.w,vert_distance=1080)).with_duration(duration+8).with_start(start)
     ### transision of layer ###
     layer3 = ImageClip('downloads/white.png').resized(height=1080).with_position(lambda t : slide3Trans(t=t,duration=duration,start=1920+200,x=0,y=0,horz_distance=1980+400)).with_duration(duration-2).with_start(start+2)
     layer4 = ImageClip('downloads/red.png').resized(height=1080).with_position(lambda t : slide3Trans(t=t,duration=duration,start=1920+500,x=0,y=0,horz_distance=1920+800)).with_duration(duration-2).with_start(start+2)
-    # red_background = ImageClip("downloads/red_image.jpg").with_position(lambda t : slide3Trans(t=t,duration=duration,start=1920,y=0,x=0,vert_distance=1080)).with_duration(duration+5).with_start(start)
     ### text and background ###
+    # check if text is longest than 25 charachter #
+    if len(text) <= 20 :
+        font_size = 55
+        margin = (50,10)
+    else:
+        font_size = 40
+        margin = (100,10)
     text = TextClip(
         # text="winter is here".upper(),  
         text=text.upper(),  
-        font_size= 60,          
+        font_size= font_size,          
         size = (500,200),
         color="white", 
         font="downloads/Helvetica-Bold.ttf",
         bg_color=None, 
-        margin=(150,10) ,
+        margin=margin ,
     )
-    text = text.with_position(lambda t: text_moving(t,text.w,text_height=text.h,duration=duration)).with_duration(duration+10).with_start(start+5)
+    text = text.with_position(lambda t: text_moving(t,text.w,text_height=text.h,duration=(duration-5))).with_duration(duration+10).with_start(start+5)
     bg_color2 = ColorClip(size=(text.w+400,text.h+50), color=(0, 0, 0))
     bg_color2 = bg_color2.with_position(lambda t :bg_move(t,width=bg_color2.w,height=bg_color2.h,duration=duration)).with_duration(duration+10).with_start(start+4)
     #### rectamgular around text ####
@@ -116,13 +143,16 @@ def Slide4(image_path,text,start,duration):
 
     #### divide image 4 to three parts ####
     img4 = ImageClip(image_path).resized(width=1920)
+    print(f"image height:{img4.h}")
     if img4.h > 1080:
         startx = img4.h - 1080
+        end_height = img4.h
     else:
         startx = 0 
-    img4_part1 = img4.cropped(x1=0,y1=startx,x2=640,y2=1080).with_position(lambda t : effect_transition2(t=t,x=0,y=2280)).with_start(start+3).with_duration(duration-3)
-    img4_part2 = img4.cropped(x1=640,y1=startx,x2=1280,y2=1080).with_position(lambda t : effect_transition2(t=t,x=640,y=2880)).with_start(start+3).with_duration(duration-3)
-    img4_part3 = img4.cropped(x1=1280,y1=startx,x2=1920,y2=1080).with_position(lambda t : effect_transition2(t=t,x=1280,y=5280)).with_start(start+3).with_duration(duration-3)
+        end_height = img4.h
+    img4_part1 = img4.cropped(x1=0,y1=startx,x2=640,y2=end_height).with_position(lambda t : effect_transition2(t=t,x=0,y=2280)).with_start(start+3).with_duration(duration-3)
+    img4_part2 = img4.cropped(x1=640,y1=startx,x2=1280,y2=end_height).with_position(lambda t : effect_transition2(t=t,x=640,y=2880)).with_start(start+3).with_duration(duration-3)
+    img4_part3 = img4.cropped(x1=1280,y1=startx,x2=1920,y2=end_height).with_position(lambda t : effect_transition2(t=t,x=1280,y=5280)).with_start(start+3).with_duration(duration-3)
     ### shadow layers for part 1 , 2  ###
     # create shadow #
     shadow_image = Image.new("RGBA", (640, 1080), (0, 0, 0, 0))
@@ -149,12 +179,12 @@ def Slide4(image_path,text,start,duration):
         interline= 30,
         horizontal_align="left",
         # margin=(50,10) ,
-    ).with_position(lambda t : effect_transition2(t=t,x=340,y=3180,total_distance=(3180-400),slow_ratio=2.4)).with_start(start).with_duration(duration)
+    ).with_position(lambda t : effect_transition2(t=t,x=340,y=3180,total_distance=(3180-400),slow_ratio=2.4)).with_start(start-4).with_duration(duration+4)
 
     ## internal text width of text4 ##
     internal_text_width = get_internal_text_width(text=text4)
     #### text color base ####
-    text_base_color = ColorClip((internal_text_width,20),color=(170,36,30)).with_position(lambda t : effect_transition2(t=t,x=340,y=3180,total_distance=(3180-(350+text4.h+50)),slow_ratio=2.5)).with_start(start).with_duration(duration)
+    text_base_color = ColorClip((internal_text_width,20),color=(170,36,30)).with_position(lambda t : effect_transition2(t=t,x=340,y=3180,total_distance=(3180-(350+text4.h+50)),slow_ratio=2.5)).with_start(start-4).with_duration(duration+4)
     ### intro clip of street politics ###
     intro = VideoFileClip("downloads/Street_Politics_intro.mov", has_mask=True,target_resolution=(1920,1080)).with_start(start+(duration-2))
     return [gray_background, left_layer_gray,middle_layer_gray,right_layer_offwhite,right_layer_lightgray,left_layer_black,
