@@ -18,7 +18,10 @@ def body(body_list,clips,audio_clips,video_name):
     w, h = bg_video.size
     speed = 800 
     total_duration = 0
+    real_total_duration = 0
     for item in body_list:
+        duration = item['duration']
+        real_total_duration += duration
         try:
             video_url = item["url"]
             local_filename = f"downloads/video.mp4"
@@ -58,7 +61,8 @@ def body(body_list,clips,audio_clips,video_name):
             audio = AudioFileClip(local_filename).with_start(new_start_time)
             audio_clips.append(audio)
     ## modify the duration of background video ##
-    background_video_repeated = repeat_video(video=bg_video, total_duration=total_duration,start=start_log_bg)
+    print(f"total duration:{real_total_duration}")
+    background_video_repeated = repeat_video(video=bg_video, total_duration=real_total_duration,start=start_log_bg)
     print(f"back ground video duration:{background_video_repeated.duration}")
     ### add logo ###
     logo_image = ImageClip("downloads/logo.png").resized(width=150).with_position((1740,20)).with_duration(background_video_repeated.duration).with_start(start_log_bg)
