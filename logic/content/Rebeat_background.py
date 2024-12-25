@@ -15,12 +15,11 @@ def repeat_video(video,total_duration,start):
                 video
                 .with_position((0,0))
                 .resized(width=1920)
-                .with_start((number*video_duration)+start)
+                .with_start((number*video_duration))
+                .with_duration(video_duration)
                 .with_fps(30)
                 )
             list_videos.append(video)
-        total_video = CompositeVideoClip(list_videos)
-        print(f"final video duration:{total_video.duration}")
+        total_video = CompositeVideoClip(list_videos).with_start(start)
         total_video = total_video.subclipped(0,total_duration+1)
-        print(f"final video duration:{total_video.duration}")
         return total_video

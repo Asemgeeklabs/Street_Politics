@@ -3,7 +3,6 @@ from logic.content.little.ImageTransition import *
 from logic.content.Rebeat_background import repeat_video
 import os
 import boto3
-from datetime import datetime
 
 ### list of all slide methods ###
 methods_list = [Slide1,Slide2,Slide3,Slide4]
@@ -20,10 +19,7 @@ def body(body_list,clips,audio_clips,video_name):
     w, h = bg_video.size
     speed = 800 
     total_duration = 0
-    real_total_duration = 0
     for item in body_list:
-        duration = item['duration']
-        real_total_duration += duration
         try:
             video_url = item["url"]
             local_filename = f"downloads/video.mp4"
@@ -42,17 +38,6 @@ def body(body_list,clips,audio_clips,video_name):
             images = item["images"]
             ## duration of each image ##
             image_duration = duration / len(images)
-            ## looping on images ##
-            number = 1
-            for image in images:
-                start_time_image = image["pause_duration"]
-                print(f"total duration_{number}:{total_duration}")
-                number += 1
-                image_url = image["url"]
-                ### download image data ###
-                image_path = "downloads/content_image.jpg"          
-                downloaded_image_path = download_image(url=image_url,filename=image_path)
-                total_duration, clips2 = image_transition(downloaded_image_path, total_duration, clips2, start_time_image, image_duration, w, h, speed)
             ### download audio ###
             local_filename = f"downloads/audio.mp3"
             response = requests.get(audioPath, stream=True) 
@@ -62,12 +47,19 @@ def body(body_list,clips,audio_clips,video_name):
                     file.write(chunk)
             audio = AudioFileClip(local_filename).with_start(new_start_time)
             audio_clips.append(audio)
+            ## looping on images ##
+            for image in images:
+                start_time_image = image["pause_duration"]
+                image_url = image["url"]
+                ### download image data ###
+                image_path = "downloads/content_image.jpg"          
+                downloaded_image_path = download_image(url=image_url,filename=image_path)
+                total_duration, clips2 = image_transition(downloaded_image_path, total_duration, clips2, start_time_image, image_duration, w, h, speed)
     ## modify the duration of background video ##
     print(f"first total duration:{total_duration}")
-    print(f"total duration:{real_total_duration}")
-    background_video_repeated = repeat_video(video=bg_video,total_duration=real_total_duration,start=start_log_bg-1)
+    background_video_repeated = repeat_video(video=bg_video,total_duration=total_duration,start=start_log_bg-1)
     print(f"back ground video duration:{background_video_repeated.duration}")
-    clips2.append(background_video_repeated)
+    clips.insert(-2,background_video_repeated)
     ### add logo ###
     logo_image = ImageClip("downloads/logo.png").resized(width=150).with_position((1740,20)).with_duration(background_video_repeated.duration).with_start(start_log_bg)
     clips2.append(logo_image)
