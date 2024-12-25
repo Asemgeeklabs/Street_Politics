@@ -2,6 +2,7 @@ import math
 from moviepy import *
 
 def repeat_video(video,total_duration,start):
+    # video = VideoFileClip("downloads/background.mp4")
     video_duration = video.duration
     if video_duration > total_duration:
         total_video = video.subclipped(0,total_duration)
@@ -21,6 +22,6 @@ def repeat_video(video,total_duration,start):
             list_videos.append(video)
         total_video = CompositeVideoClip(list_videos)
         print(f"final video duration:{total_video.duration}")
-        total_video = total_video.subclipped(0,total_duration)
+        total_video = total_video.subclipped(0,total_duration+1)
         print(f"final video duration:{total_video.duration}")
         return total_video

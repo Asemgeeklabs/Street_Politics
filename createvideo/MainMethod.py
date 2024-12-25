@@ -12,7 +12,9 @@ methods_list = [Slide1,Slide2,Slide3,Slide4]
 def body(body_list,clips,audio_clips,video_name):
     clips2 = []
     ### start of back ground video and logo ###
-    start_log_bg = body_list[0]["start_time"]
+    start_log_bg = 46.941937
+    # start_log_bg = body_list[0]["start_time"]
+    print(f"start time logo:{start_log_bg}")
     ### create background video ###
     bg_video = VideoFileClip("downloads/background.mp4")
     w, h = bg_video.size
@@ -63,8 +65,9 @@ def body(body_list,clips,audio_clips,video_name):
     ## modify the duration of background video ##
     print(f"first total duration:{total_duration}")
     print(f"total duration:{real_total_duration}")
-    background_video_repeated = repeat_video(video=bg_video, total_duration=real_total_duration,start=start_log_bg)
+    background_video_repeated = repeat_video(video=bg_video,total_duration=real_total_duration,start=start_log_bg-1)
     print(f"back ground video duration:{background_video_repeated.duration}")
+    clips2.append(background_video_repeated)
     ### add logo ###
     logo_image = ImageClip("downloads/logo.png").resized(width=150).with_position((1740,20)).with_duration(background_video_repeated.duration).with_start(start_log_bg)
     clips2.append(logo_image)
@@ -72,7 +75,6 @@ def body(body_list,clips,audio_clips,video_name):
     outro = VideoFileClip("downloads/outro.mp4").with_start(body_list[-1]["start_time"]+body_list[-1]["duration"])
     clips2.append(outro)
     ### APPEND CLIPS of body to clips of intro ###
-    clips.append(background_video_repeated)
     clips.extend(clips2)
     video = CompositeVideoClip(clips,size=(1920,1080))
     ### add audio ###
