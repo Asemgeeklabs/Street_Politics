@@ -12,8 +12,8 @@ methods_list = [Slide1,Slide2,Slide3,Slide4]
 def body(body_list,clips,audio_clips,video_name):
     clips2 = []
     ### start of back ground video and logo ###
-    start_log_bg = 46.941937
-    # start_log_bg = body_list[0]["start_time"]
+    # start_log_bg = 46.941937
+    start_log_bg = body_list[0]["start_time"]
     print(f"start time logo:{start_log_bg}")
     ### create background video ###
     bg_video = VideoFileClip("downloads/background.mp4")

@@ -109,8 +109,8 @@ def Slide3(image_path,text,start,duration):
         font_size = 55
         margin = (50,10)
     else:
-        font_size = 40
-        margin = (100,10)
+        font_size = 37
+        margin = (120,10)
     text = TextClip(
         # text="winter is here".upper(),  
         text=text.upper(),  
