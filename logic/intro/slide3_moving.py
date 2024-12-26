@@ -132,37 +132,37 @@ def sliding_move(t, start, y, total_distance=1920):
 #     if filename is None:
 #         filename = "downloads/red_image_downloaded.jpg"
     
-#     # Check the extension from the URL
-#     ext = os.path.splitext(url)[1].lower()
-#     if ext == '.svg':
-#         # Ensure the output filename ends with .png
-#         filename = os.path.splitext(filename)[0] + '.png'
+    # # Check the extension from the URL
+    # ext = os.path.splitext(url)[1].lower()
+    # if ext == '.svg':
+    #     # Ensure the output filename ends with .png
+    #     filename = os.path.splitext(filename)[0] + '.png'
 
-#     # Send a GET request to the URL
-#     print("before request image>>>>>>>>>>")
-#     response = requests.get(url)
+    # # Send a GET request to the URL
+    # print("before request image>>>>>>>>>>")
+    # response = requests.get(url)
 
-#     # Check if the request was successful
-#     if response.status_code == 200:
-#         print("Image request success!!!!")
+    # # Check if the request was successful
+    # if response.status_code == 200:
+    #     print("Image request success!!!!")
 
-#         if ext == '.svg':
-#             # Convert SVG to PNG
-#             try:
-#                 print("Converting SVG to PNG...")
-#                 cairosvg.svg2png(bytestring=response.content, write_to=filename)
-#                 print(f"SVG converted and saved as {filename}")
-#             except Exception as e:
-#                 print(f"Failed to convert SVG to PNG: {e}")
-#         else:
-#             # Save non-SVG image content to a file
-#             with open(filename, "wb") as file:
-#                 file.write(response.content)
-#             print(f"Image downloaded and saved as {filename}")
-#     else:
-#         print(f"Failed to download image. Status code: {response.status_code}")
+    #     if ext == '.svg':
+    #         # Convert SVG to PNG
+    #         try:
+    #             print("Converting SVG to PNG...")
+    #             cairosvg.svg2png(bytestring=response.content, write_to=filename)
+    #             print(f"SVG converted and saved as {filename}")
+    #         except Exception as e:
+    #             print(f"Failed to convert SVG to PNG: {e}")
+    #     else:
+    #         # Save non-SVG image content to a file
+    #         with open(filename, "wb") as file:
+    #             file.write(response.content)
+    #         print(f"Image downloaded and saved as {filename}")
+    # else:
+    #     print(f"Failed to download image. Status code: {response.status_code}")
 
-#     return filename
+    # return filename
 
 def download_image(url,filename=None):
     ### path that image saved on it ###

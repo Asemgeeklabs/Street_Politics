@@ -36,8 +36,6 @@ def body(body_list,clips,audio_clips,video_name):
             audioPath = item["audioPath"]
             duration = item["duration"]
             images = item["images"]
-            ## duration of each image ##
-            image_duration = duration / len(images)
             ### download audio ###
             local_filename = f"downloads/audio.mp3"
             response = requests.get(audioPath, stream=True) 
