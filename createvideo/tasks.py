@@ -33,7 +33,7 @@ def bodytest(slides_list,body_list,webhook):
         componant = methods_list[index](image_path=image_data,duration=duration,text=text,start=start)
         list_componant.extend(componant)
         list_audios.append((audio_url,start))
-    intro_audio = AudioFileClip("downloads/intro_audio.mp3").with_start(slides_list[-1]["start_time"]+slides_list[-1]["duration"])
+    intro_audio = AudioFileClip("downloads/intro_audio.mp3").with_start((slides_list[-1]["start_time"])+(slides_list[-1]["duration"]))
     list_audios_instance = add_audios(list_audios)
     list_audios_instance.append(intro_audio)
     ### start body process ###
