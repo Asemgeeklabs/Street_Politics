@@ -67,6 +67,9 @@ def body(body_list,clips,audio_clips,video_name):
     clips2.append(logo_image)
     ### add outro ###
     outro = VideoFileClip("downloads/outro.mp4").with_start(body_list[-1]["start_time"]+body_list[-1]["duration"])
+    outro_audio = outro.audio
+    outro_audio = outro_audio.with_start((body_list[-1]["start_time"])+(body_list[-1]["duration"]))
+    audio_clips.append(outro_audio)
     clips2.append(outro)
     ### APPEND CLIPS of body to clips of intro ###
     clips.extend(clips2)

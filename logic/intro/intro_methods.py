@@ -107,12 +107,11 @@ def Slide3(image_path,text,start,duration):
     # check if text is longest than 25 charachter #
     if len(text) <= 20 :
         font_size = 55
-        margin = (50,10)
+        margin = (80,10)
     else:
         font_size = 37
         margin = (120,10)
     text = TextClip(
-        # text="winter is here".upper(),  
         text=text.upper(),  
         font_size= font_size,          
         size = (500,200),
