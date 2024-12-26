@@ -4,7 +4,8 @@ from rest_framework import serializers
 class ImagesSerializer(serializers.Serializer):
     url = serializers.URLField()
     pause_duration = serializers.FloatField()
- 
+    duration = serializers.FloatField()
+
 ### serializer for slides ###
 class SlidesSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=255)
