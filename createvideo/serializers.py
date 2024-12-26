@@ -5,6 +5,7 @@ class ImagesSerializer(serializers.Serializer):
     url = serializers.URLField()
     pause_duration = serializers.FloatField()
     duration = serializers.FloatField(required=False)
+    
 
 ### serializer for slides ###
 class SlidesSerializer(serializers.Serializer):
