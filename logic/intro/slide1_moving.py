@@ -1,12 +1,24 @@
 from moviepy import *
+import os
 import requests
+
+def remove_local_file(file_path):
+    try:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            print(f"Removed local file: {file_path}")
+        else:
+            print(f"File does not exist: {file_path}")
+    except Exception as e:
+        print(f"Error removing file {file_path}: {str(e)}")
 
 def add_audios(audios):
     ## audios creating ##
     list_audios = []
     ## looping on all audios ##
-    local_filename = f"downloads/sample.mp3"
+    i = 1
     for url , start in audios:
+        local_filename = f"downloads/sample{i}.mp3"
         response = requests.get(url, stream=True) 
         response.raise_for_status()  
         with open(local_filename, "wb") as file:
@@ -16,6 +28,8 @@ def add_audios(audios):
         print(f"start:{start}")
         audio = audio.with_start(start)
         list_audios.append(audio)
+        i += 1
+        remove_local_file(local_filename) 
     return list_audios
 
 # Define the video size (width and height) and duration

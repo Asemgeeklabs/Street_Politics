@@ -19,6 +19,7 @@ def body(body_list,clips,audio_clips,video_name):
     w, h = bg_video.size
     speed = 800 
     total_duration = 0
+    audio_index = 6
     for item in body_list:
         try:
             video_url = item["url"]
@@ -37,15 +38,16 @@ def body(body_list,clips,audio_clips,video_name):
             duration = item["duration"]
             images = item["images"]
             ### download audio ###
-            # local_filename = f"downloads/audio.mp3"
-            # response = requests.get(audioPath, stream=True) 
-            # response.raise_for_status()  
-            # with open(local_filename, "wb") as file:
-            #     for chunk in response.iter_content(chunk_size=8192):  
-            #         file.write(chunk)
-            # audio = AudioFileClip(local_filename).with_start(new_start_time)
-            audio = AudioFileClip(audioPath).with_start(new_start_time).with_duration(duration)
+            local_filename = f"downloads/audio{audio_index}.mp3"
+            response = requests.get(audioPath, stream=True) 
+            response.raise_for_status()  
+            with open(local_filename, "wb") as file:
+                for chunk in response.iter_content(chunk_size=8192):  
+                    file.write(chunk)
+            audio = AudioFileClip(local_filename).with_start(new_start_time)
             audio_clips.append(audio)
+            i += 1
+            remove_local_file(local_filename) # remove file name of audio 
             ## looping on images ##
             for image in images:
                 start_time_image = image["pause_duration"]
