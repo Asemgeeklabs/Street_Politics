@@ -46,7 +46,7 @@ def body(body_list,clips,audio_clips,video_name):
                     file.write(chunk)
             audio = AudioFileClip(local_filename).with_start(new_start_time)
             audio_clips.append(audio)
-            i += 1
+            audio_index += 1
             remove_local_file(local_filename) # remove file name of audio 
             ## looping on images ##
             for image in images:
