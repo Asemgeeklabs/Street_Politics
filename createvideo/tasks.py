@@ -41,12 +41,19 @@ def bodytest(slides_list,body_list,webhook):
     url =  settings.MEDIA_URL + path
     payload = {
         "url": url,
+        "status":"Done",
         "metadata" : meta_data
     }
     try:
         response = requests.post(webhook_url, json=payload)
         print("webhood done!")
     except requests.exceptions.RequestException as e:
+        print(f"An error occurred while sending video notification: {e}")
+        payload = {
+            "status": "Failed",
+            "metadata" : meta_data
+        }
+        requests.post(webhook_url, json=payload)
         print(f"An error occurred while sending video notification: {e}")
     
     b = is_last_task()
