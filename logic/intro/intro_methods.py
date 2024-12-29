@@ -111,7 +111,7 @@ def Slide3(image_path,text,start,duration):
     else:
         font_size = 37
         margin = (120,10)
-    text = TextClip(
+    Main_text = TextClip(
         text=text.upper(),  
         font_size= font_size,          
         size = (500,200),
@@ -120,12 +120,12 @@ def Slide3(image_path,text,start,duration):
         bg_color=None, 
         margin=margin ,
     )
-    text = text.with_position(lambda t: text_moving(t,text.w,text_height=text.h,duration=(duration-5))).with_duration(duration+10).with_start(start+5)
-    bg_color2 = ColorClip(size=(text.w+400,text.h+50), color=(0, 0, 0))
+    Main_text = Main_text.with_position(lambda t: text_moving(t,Main_text.w,text_height=Main_text.h,duration=(duration-5))).with_duration(duration+10).with_start(start+5)
+    bg_color2 = ColorClip(size=(Main_text.w+400,Main_text.h+50), color=(0, 0, 0))
     bg_color2 = bg_color2.with_position(lambda t :bg_move(t,width=bg_color2.w,height=bg_color2.h,duration=duration)).with_duration(duration+10).with_start(start+4)
     #### rectamgular around text ####
-    rect = DrawRect(Canvas_size=bg_color2.size , rect_size= text.size).with_duration(duration+10).with_start(start+4).with_position(lambda t :bg_move(t,width=bg_color2.w,height=rect.h,duration=duration))
-    return [red_image,layer3,layer4,slided_image,bg_color2,rect,text]
+    rect = DrawRect(Canvas_size= bg_color2.size , rect_size= Main_text.size).with_duration(duration+10).with_start(start+4).with_position(lambda t :bg_move(t,width=bg_color2.w,height=rect.h,duration=duration))
+    return [red_image,layer3,layer4,slided_image,bg_color2,rect,Main_text]
 
 ################################################
 ############# function of slide 4 ##############

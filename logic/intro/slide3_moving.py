@@ -1,9 +1,6 @@
 from moviepy import *
 from PIL import Image 
 import requests
-# from io import BytesIO
-# import os
-# import cairosvg
 
 ## method for transition from bottom to top smoothly ##
 def effect_transition(t, x, y ,total_distance=None , slow_ratio=1):
@@ -126,44 +123,6 @@ def sliding_move(t, start, y, total_distance=1920):
         offset = (280 + (360 + 330 + 310 + 290 + 270 + 250 + 230 + 210 + 190 + 170 + 150 + 120 + 90 + 70 + 50) * 0.3) * scale_factor
         return (start - offset, y)
 
-### method to download image by url ###
-# def download_image(url, filename=None):
-#     # Default path for saving images
-#     if filename is None:
-#         filename = "downloads/red_image_downloaded.jpg"
-    
-    # # Check the extension from the URL
-    # ext = os.path.splitext(url)[1].lower()
-    # if ext == '.svg':
-    #     # Ensure the output filename ends with .png
-    #     filename = os.path.splitext(filename)[0] + '.png'
-
-    # # Send a GET request to the URL
-    # print("before request image>>>>>>>>>>")
-    # response = requests.get(url)
-
-    # # Check if the request was successful
-    # if response.status_code == 200:
-    #     print("Image request success!!!!")
-
-    #     if ext == '.svg':
-    #         # Convert SVG to PNG
-    #         try:
-    #             print("Converting SVG to PNG...")
-    #             cairosvg.svg2png(bytestring=response.content, write_to=filename)
-    #             print(f"SVG converted and saved as {filename}")
-    #         except Exception as e:
-    #             print(f"Failed to convert SVG to PNG: {e}")
-    #     else:
-    #         # Save non-SVG image content to a file
-    #         with open(filename, "wb") as file:
-    #             file.write(response.content)
-    #         print(f"Image downloaded and saved as {filename}")
-    # else:
-    #     print(f"Failed to download image. Status code: {response.status_code}")
-
-    # return filename
-
 def download_image(url,filename=None):
     ### path that image saved on it ###
     if filename == None:
@@ -230,20 +189,20 @@ def text_moving(t, text_width, text_height, duration):
     if 0 <= t < segment_duration:
         offset = 1920
         progress = t / segment_duration  # Progress as a fraction
-        return (offset - progress * ((text_width * 0.6) + 200), "center")
+        return (offset - progress * ((text_width * 0.6) + 150), "center")
     
     elif segment_duration <= t <= 2 * segment_duration:
-        offset = 1920 - ((text_width) * 0.6) - 200
+        offset = 1920 - ((text_width) * 0.6) - 150
         progress = (t - segment_duration) / segment_duration  # Progress in second segment
         return (offset - progress * (text_width * 0.4), "center")
     
     elif 2 * segment_duration < t <= duration:
-        offset = 1920 - (text_width + 200)
+        offset = 1920 - (text_width + 150)
         return (offset, "center")
     
     else:
         # Ensure `t - duration` does not exceed bounds for effect_transition
-        offset = 1920 - (text_width + 200)
+        offset = 1920 - (text_width + 150)
         return effect_transition(
             t=(t - duration),
             x=offset,
