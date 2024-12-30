@@ -34,6 +34,7 @@ def body(body_list,clips,audio_clips,video_name):
             video_index += 1
             new_start_time = item["start_time"]
             total_duration, clips2, audio_clips = video_transition(local_filename, total_duration, clips2, new_start_time, audio_clips, w, h, speed)
+            remove_local_file(local_filename)
         except:
             new_start_time = item["start_time"]
             audioPath = item["audioPath"]
@@ -59,6 +60,7 @@ def body(body_list,clips,audio_clips,video_name):
                 image_path = "downloads/content_image.jpg"          
                 downloaded_image_path = download_image(url=image_url,filename=image_path)
                 total_duration, clips2 = image_transition(downloaded_image_path, total_duration, clips2, start_time_image, duration , w, h, speed)
+                remove_local_file(downloaded_image_path)
     ## modify the duration of background video ##
     print(f"first total duration:{total_duration}")
     background_video_repeated = repeat_video(video=bg_video,total_duration=total_duration,start=start_log_bg-1)
