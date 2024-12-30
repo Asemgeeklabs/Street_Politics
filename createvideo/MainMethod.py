@@ -20,16 +20,18 @@ def body(body_list,clips,audio_clips,video_name):
     speed = 800 
     total_duration = 0
     audio_index = 6
+    video_index = 0
     for item in body_list:
         try:
             video_url = item["url"]
-            local_filename = f"downloads/video.mp4"
+            local_filename = f"downloads/video{video_index}.mp4"
             # Perform the GET request and download the file
             response = requests.get(video_url, stream=True)
             response.raise_for_status()  # Check for HTTP errors
             with open(local_filename, "wb") as file:
                 for chunk in response.iter_content(chunk_size=8192):  # Download in chunks
                     file.write(chunk)
+            video_index += 1
             new_start_time = item["start_time"]
             total_duration, clips2, audio_clips = video_transition(local_filename, total_duration, clips2, new_start_time, audio_clips, w, h, speed)
         except:

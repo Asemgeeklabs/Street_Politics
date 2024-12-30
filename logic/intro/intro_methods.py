@@ -101,16 +101,16 @@ def Slide3(image_path,text,start,duration):
         # ## second red image ##
         red_image = ImageClip(second_image_path).resized(height=1680).with_position(lambda t :slide3Trans(t=t,duration=duration,start=1920+slided_image.w,y=red_image_movement(t=t),x=slided_image.w,vert_distance=1080)).with_duration(duration+8).with_start(start)
     ### transision of layer ###
-    layer3 = ImageClip('downloads/white.png').resized(height=1080).with_position(lambda t : slide3Trans(t=t,duration=duration,start=1920+200,x=0,y=0,horz_distance=1980+400)).with_duration(duration-2).with_start(start+2)
-    layer4 = ImageClip('downloads/red.png').resized(height=1080).with_position(lambda t : slide3Trans(t=t,duration=duration,start=1920+500,x=0,y=0,horz_distance=1920+800)).with_duration(duration-2).with_start(start+2)
+    layer3 = ImageClip('downloads/white.png').resized(height=1080).with_position(lambda t : slide3Trans(t=t,duration=duration,start=1920+100,x=0,y=0,horz_distance=1980+400)).with_duration(duration).with_start(start+2)
+    layer4 = ImageClip('downloads/red.png').resized(height=1080).with_position(lambda t : slide3Trans(t=t,duration=duration,start=1920+500,x=0,y=0,horz_distance=1920+800)).with_duration(duration).with_start(start+2)
     ### text and background ###
     # check if text is longest than 25 charachter #
     if len(text) <= 20 :
         font_size = 55
-        margin = (80,10)
+        margin = (90,10)
     else:
-        font_size = 37
-        margin = (120,10)
+        font_size = 38
+        margin = (90,10)
     Main_text = TextClip(
         text=text.upper(),  
         font_size= font_size,          
