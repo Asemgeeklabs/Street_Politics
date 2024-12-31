@@ -179,7 +179,7 @@ def bg_move(t,width,height,duration):
         offset = 1920-((width)*0.6)-((width)*0.4)
         return effect_transition(t=(t-(duration-4)),x=offset,y=(1080-height)//2,total_distance=1080)
 
-def text_moving(t, text_width, text_height, duration):
+def text_moving(t, text_width, text_height, duration , centered_distance):
     if t < 0:
         return (1920, "center")
     
@@ -189,20 +189,20 @@ def text_moving(t, text_width, text_height, duration):
     if 0 <= t < segment_duration:
         offset = 1920
         progress = t / segment_duration  # Progress as a fraction
-        return (offset - progress * ((text_width * 0.6) + 150), "center")
+        return (offset - progress * ((text_width * 0.6) + centered_distance), "center")
     
     elif segment_duration <= t <= 2 * segment_duration:
-        offset = 1920 - ((text_width) * 0.6) - 150
+        offset = 1920 - ((text_width) * 0.6) - centered_distance
         progress = (t - segment_duration) / segment_duration  # Progress in second segment
         return (offset - progress * (text_width * 0.4), "center")
     
     elif 2 * segment_duration < t <= duration:
-        offset = 1920 - (text_width + 150)
+        offset = 1920 - (text_width + centered_distance)
         return (offset, "center")
     
     else:
         # Ensure `t - duration` does not exceed bounds for effect_transition
-        offset = 1920 - (text_width + 150)
+        offset = 1920 - (text_width + centered_distance)
         return effect_transition(
             t=(t - duration),
             x=offset,

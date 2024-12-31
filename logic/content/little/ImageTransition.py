@@ -22,7 +22,7 @@ def image_transition(image_path, total_duration, clips, new_start_time, pause_du
         start_position = ("center", (h /2)-300)
         center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
     elif image_height < image_width:
-        process_image_width(image_path, "downloads/final_output.png", target_width=1080)
+        process_image_width(image_path, "downloads/final_output.png", target_width=1000)
         image_clip = ImageClip("downloads/final_output.png")
         start_position = ("center", (h /2)-100)
         center_position = ("center", abs((h / 2) - (image_clip.h / 2)))

@@ -6,10 +6,14 @@ def DrawRect(Canvas_size,rect_size):
     # Parameters
     width, height = Canvas_size  # Canvas size
     rect_width, rect_height = rect_size  # Rectangle dimensions
-    rect_width += 310
+    # rect_width += 310
     frame_count = 1000  # Total frames for the animation
 
     # Calculate rectangle coordinates
+    # x1 = rect_width
+    # x2 = width 
+    # y2 = (height - rect_height) // 2
+    # y1 = y2 + rect_height
     x1 = width
     x2 = width -rect_width
     y2 = (height - rect_height) // 2

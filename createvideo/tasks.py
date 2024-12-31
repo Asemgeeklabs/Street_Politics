@@ -94,6 +94,6 @@ def testsss(image_url,text,duration):
     # response = Slide4(image_path=image_data,text=text,start=0,duration=duration)
     response = Slide3(image_path=image_data,text=text,start=6,duration=duration)
     video = CompositeVideoClip(response,size=(1920,1080))
-    output_path = f"downloads/testslide112.mp4"
+    output_path = f"downloads/testslide11234_testy.mp4"
     video.write_videofile(output_path, fps=30)
     
