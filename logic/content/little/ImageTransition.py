@@ -1,6 +1,13 @@
 from moviepy import *
 from PIL import Image
+import requests
 from .EditingOnImage import process_image_height, process_image_width
+def scaling_image(t,time_to_center):
+    if t <= time_to_center:
+        return 1
+    else:
+        return (1 + ((t-time_to_center)*0.06))
+
 def move_image(t, start_pos, center_pos, time_to_ctr, pause_dur, w, h):
     if t <= 0:
         return start_pos
@@ -8,7 +15,7 @@ def move_image(t, start_pos, center_pos, time_to_ctr, pause_dur, w, h):
         new_height = start_pos[1] - (t * (start_pos[1] - center_pos[1]) / time_to_ctr)
         return (start_pos[0], new_height)
     elif time_to_ctr <= t < time_to_ctr + pause_dur:
-        return center_pos
+        return ("center", "center")
     else:
         return (w, h)
 
@@ -16,20 +23,21 @@ def image_transition(image_path, total_duration, clips, new_start_time, pause_du
     print("enter image transition")
     image = Image.open(image_path)
     image_width, image_height = image.size
-    if image_height > image_width:
-        process_image_height(image_path, "downloads/final_output.png", target_height=850)
-        image_clip = ImageClip("downloads/final_output.png")
-        start_position = ("center", (h /2)-300)
-        center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
-    elif image_height < image_width:
-        process_image_width(image_path, "downloads/final_output.png", target_width=1000)
-        image_clip = ImageClip("downloads/final_output.png")
+    if abs(image_width - image_height) > 100:
+        if image_height > image_width:
+            process_image_height(image_path, "temp/final_output.png", target_height=650)
+            image_clip = ImageClip("temp/final_output.png")
+            start_position = ("center", (h /2)-300)
+            center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
+        else:
+            process_image_width(image_path, "final_output.png", target_width=900)
+            image_clip = ImageClip("final_output.png")
+            start_position = ("center", (h /2)-100)
+            center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
+    else:
+        process_image_width(image_path, "final_output.png", target_width=600)
+        image_clip = ImageClip("final_output.png")
         start_position = ("center", (h /2)-100)
-        center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
-    elif image_height == image_width:
-        process_image_height(image_path, "downloads/final_output.png", target_height=850)
-        image_clip = ImageClip("downloads/final_output.png")
-        start_position = ("center", (h /2)-300)
         center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
     print("finishing processing image")
     distance_to_center = start_position[1] - center_position[1]
@@ -49,14 +57,24 @@ def image_transition(image_path, total_duration, clips, new_start_time, pause_du
     total_duration += animated_image.duration
     return total_duration, clips
 
-def video_transition(video_path, total_duration, clips, new_start_time, audio_clips, w, h, speed):
+def video_transition(i, video_path, total_duration, clips, new_start_time, audio, audio_clips, w, h, speed):
     print("entering video transition")
-    video_clip = VideoFileClip(video_path)
+    local_filename = f"temp/sample{i}.mp4"
+
+    # Perform the GET request and download the file
+    response = requests.get(video_path, stream=True)
+    response.raise_for_status()  # Check for HTTP errors
+    with open(local_filename, "wb") as file:
+        for chunk in response.iter_content(chunk_size=8192):  # Download in chunks
+            file.write(chunk)
+    video_clip = VideoFileClip(local_filename)
     pause_duration = video_clip.duration
     # audio clips
-    audio = video_clip.audio
-    audio = audio.with_start(new_start_time)
-    audio_clips.append(audio)
+    if not audio:
+        video_clip = video_clip.without_audio()
+    else:
+        audio_clip = (new_start_time, new_start_time+pause_duration)
+        audio_clips.append(audio_clip)
     # Extract the first frame
     frame_width, frame_height = video_clip.w, video_clip.h
     print("enerting process of video" )
@@ -64,11 +82,11 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
         video_clip = video_clip.resized(height=850)
         frame_width, frame_height = video_clip.w, video_clip.h
         frame_image = Image.new("RGBA", (frame_width, frame_height), (0, 0, 0, 0))
-        frame_image.save("downloads/final_output.png")
-        frame_image = "downloads/final_output.png"
+        frame_image.save("temp/final_output.png")
+        frame_image = "temp/final_output.png"
         
-        process_image_height(frame_image, "downloads/final_output.png", target_height=850)
-        frame_image = ImageClip("downloads/final_output.png")
+        process_image_height(frame_image, "temp/final_output.png", target_height=850)
+        frame_image = ImageClip("temp/final_output.png")
         start_position = (721, (h /2)-300)
         shadow_position = (721-21, start_position[1]-12)
         shadow_center = (721-21, abs((h / 2) - (frame_image.h / 2))-13)
@@ -77,10 +95,10 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
         video_clip = video_clip.resized(width=1080)
         frame_width, frame_height = video_clip.w, video_clip.h
         frame_image = Image.new("RGBA", (frame_width, frame_height), (0, 0, 0, 0))
-        frame_image.save("downloads/final_output.png")
-        frame_image = "downloads/final_output.png"
-        process_image_width(frame_image, "downloads/final_output.png", target_width=1080)
-        frame_image = ImageClip("downloads/final_output.png")
+        frame_image.save("temp/final_output.png")
+        frame_image = "temp/final_output.png"
+        process_image_width(frame_image, "temp/final_output.png", target_width=1080)
+        frame_image = ImageClip("temp/final_output.png")
         start_position = ("center", (h /2)-100)
         shadow_position = (420-21, start_position[1]-12)
         shadow_center = (420 -21, abs((h / 2) - (frame_image.h / 2))-13)
@@ -88,8 +106,9 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
     distance_to_center = start_position[1] - center_position[1]
     time_to_center = distance_to_center / speed
     print("animating the video")
+
     # animating shadow
-    shadow = ImageClip("downloads/final_output.png")
+    shadow = ImageClip("temp/final_output.png")
     animated_shadow = (
     shadow 
     .with_start(new_start_time)
