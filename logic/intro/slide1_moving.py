@@ -25,7 +25,6 @@ def add_audios(audios):
             for chunk in response.iter_content(chunk_size=8192):  
                 file.write(chunk)
         audio = AudioFileClip(local_filename)
-        print(f"start:{start}")
         audio = audio.with_start(start)
         list_audios.append(audio)
         i += 1

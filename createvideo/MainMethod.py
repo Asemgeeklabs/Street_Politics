@@ -11,7 +11,6 @@ methods_list = [Slide1,Slide2,Slide3,Slide4]
 def body(body_list,clips,audio_clips,video_name):
     clips2 = []
     ### start of back ground video and logo ###
-    # start_log_bg = 46.941937
     start_log_bg = body_list[0]["start_time"]
     print(f"start time logo:{start_log_bg}")
     ### create background video ###
@@ -63,8 +62,9 @@ def body(body_list,clips,audio_clips,video_name):
                 remove_local_file(downloaded_image_path)
     ## modify the duration of background video ##
     print(f"first total duration:{total_duration}")
-    background_video_repeated = repeat_video(video=bg_video,total_duration=total_duration,start=start_log_bg-1)
+    background_video_repeated = repeat_video(video=bg_video,total_duration=total_duration).with_start(start_log_bg-1)
     print(f"back ground video duration:{background_video_repeated.duration}")
+    print(f"back ground start time :{background_video_repeated.start}")
     clips.insert(-2,background_video_repeated)
     ### add logo ###
     logo_image = ImageClip("downloads/logo.png").resized(width=150).with_position((1740,20)).with_duration(background_video_repeated.duration).with_start(start_log_bg)
@@ -83,7 +83,7 @@ def body(body_list,clips,audio_clips,video_name):
     ### add audio to video ###
     video = video.with_audio(final_audio)
     output_path = f"downloads/{video_name}.mp4"
-    video.write_videofile(output_path, fps=120)
+    video.write_videofile(output_path, fps=30)
     path = upload_to_s3(output_path, f"street_politics/{video_name}.mp4")
     return path
 

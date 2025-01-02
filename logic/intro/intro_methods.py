@@ -120,14 +120,10 @@ def Slide3(image_path,text,start,duration):
         bg_color=None, 
         margin=margin ,
     )
-    print(f"main text fontsize :{font_size}")
-    print(f"main text width :{Main_text.w}")
-    print(f"main text height :{Main_text.h}")
     centered_distance = (1000 - Main_text.w) // 2
     Main_text = Main_text.with_position(lambda t: text_moving(t,Main_text.w,text_height=Main_text.h,duration=(duration-5),centered_distance=centered_distance)).with_duration(duration+10).with_start(start+5)
     # bg_color2 = ColorClip(size=(Main_text.w+400,Main_text.h+50), color=(0, 0, 0))
     bg_color2 = ColorClip(size=(1060,250), color=(0, 0, 0))
-    print(f"back ground width:{bg_color2.w}")
     bg_color2 = bg_color2.with_position(lambda t :bg_move(t,width=bg_color2.w,height=bg_color2.h,duration=duration)).with_duration(duration+10).with_start(start+4)
     #### rectamgular around text ####
     # rect = DrawRect(Canvas_size= bg_color2.size , rect_size= Main_text.size).with_duration(duration+10).with_start(start+4).with_position(lambda t :bg_move(t,width=bg_color2.w,height=rect.h,duration=duration))
@@ -150,7 +146,6 @@ def Slide4(image_path,text,start,duration):
 
     #### divide image 4 to three parts ####
     img4 = ImageClip(image_path).resized(width=1920)
-    print(f"image height:{img4.h}")
     if img4.h > 1080:
         startx = img4.h - 1080
         end_height = img4.h

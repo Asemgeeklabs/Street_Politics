@@ -1,10 +1,11 @@
 import math 
 from moviepy import *
 
-def repeat_video(video,total_duration,start):
+def repeat_video(video,total_duration):
+    print(f"total duration {total_duration}")
     video_duration = video.duration
     if video_duration > total_duration:
-        total_video = video.subclipped(0,total_duration)
+        total_video = video.subclipped(0,total_duration+2)
         return total_video
     else: 
         repeated_times = total_duration / video_duration
@@ -20,6 +21,6 @@ def repeat_video(video,total_duration,start):
                 .with_fps(30)
                 )
             list_videos.append(video)
-        total_video = CompositeVideoClip(list_videos).with_start(start)
-        total_video = total_video.subclipped(0,total_duration+1)
+        total_video = CompositeVideoClip(list_videos)
+        total_video = total_video.subclipped(0,total_duration+2)
         return total_video
