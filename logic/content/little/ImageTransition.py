@@ -18,6 +18,17 @@ def move_image(t, start_pos, center_pos, time_to_ctr, pause_dur, w, h):
         return ("center", "center")
     else:
         return (w, h)
+    
+def move_shadow(t, start_pos, center_pos, time_to_ctr, pause_dur, w, h):
+    if t <= 0:
+        return start_pos
+    elif 0 < t <= time_to_ctr:
+        new_height = start_pos[1] - (t * (start_pos[1] - center_pos[1]) / time_to_ctr)
+        return (start_pos[0], new_height)
+    elif time_to_ctr <= t < time_to_ctr + pause_dur:
+        return center_pos
+    else:
+        return (w, h)
 
 def image_transition(image_path, total_duration, clips, new_start_time, pause_duration, w, h, speed): 
     # print("enter image transition")
@@ -105,7 +116,7 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
     .with_duration(pause_duration)
     .with_position(lambda t, sp=shadow_position, cp=shadow_center,
                    time_to_ctr=time_to_center, pause_dur=pause_duration:
-                   move_image(t, sp, cp, time_to_ctr, pause_dur, w, h))
+                   move_shadow(t, sp, cp, time_to_ctr, pause_dur, w, h))
     )
     animated_shadow = animated_shadow.with_effects([vfx.CrossFadeIn(0.2)])
     animated_video = (
@@ -114,7 +125,7 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
     .with_duration(pause_duration)
     .with_position(lambda t, sp=start_position, cp=center_position,
                    time_to_ctr=time_to_center, pause_dur=pause_duration:
-                   move_image(t, sp, cp, time_to_ctr, pause_dur, w, h))
+                   move_shadow(t, sp, cp, time_to_ctr, pause_dur, w, h))
     )
     animated_video = animated_video.with_effects([vfx.CrossFadeIn(0.2)])
     clips.append(animated_shadow)
