@@ -103,7 +103,7 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
         frame_image = ImageClip("downloads/final_output.png")
         start_position = ("center", (h /2)-100)
         shadow_position = (420-21, start_position[1]-12)
-        shadow_center = (420 -21, abs((h / 2) - (frame_image.h / 2))+23)
+        shadow_center = (420 -21, abs((h / 2) - (frame_image.h / 2))-13)
         center_position = ("center", abs((h / 2) - (frame_image.h / 2)))
     distance_to_center = start_position[1] - center_position[1]
     time_to_center = distance_to_center / speed
@@ -125,7 +125,7 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
     .with_duration(pause_duration)
     .with_position(lambda t, sp=start_position, cp=center_position,
                    time_to_ctr=time_to_center, pause_dur=pause_duration:
-                   move_image(t, sp, cp, time_to_ctr, pause_dur, w, h))
+                   move_shadow(t, sp, cp, time_to_ctr, pause_dur, w, h))
     )
     animated_video = animated_video.with_effects([vfx.CrossFadeIn(0.2)])
     clips.append(animated_shadow)
