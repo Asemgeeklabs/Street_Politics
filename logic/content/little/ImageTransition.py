@@ -58,27 +58,17 @@ def image_transition(image_path, total_duration, clips, new_start_time, pause_du
     total_duration += animated_image.duration
     return total_duration, clips
 
-def video_transition(i, video_path, total_duration, clips, new_start_time, audio, audio_clips, w, h, speed):
-    # print("entering video transition")
-    local_filename = f"downloads/sample{i}.mp4"
-
-    # Perform the GET request and download the file
-    response = requests.get(video_path, stream=True)
-    response.raise_for_status()  # Check for HTTP errors
-    with open(local_filename, "wb") as file:
-        for chunk in response.iter_content(chunk_size=8192):  # Download in chunks
-            file.write(chunk)
-    video_clip = VideoFileClip(local_filename)
+def video_transition(video_path, total_duration, clips, new_start_time, audio_clips, w, h, speed):
+    print("entering video transition")
+    video_clip = VideoFileClip(video_path)
     pause_duration = video_clip.duration
     # audio clips
-    if not audio:
-        video_clip = video_clip.without_audio()
-    else:
-        audio_clip = (new_start_time, new_start_time+pause_duration)
-        audio_clips.append(audio_clip)
+    audio = video_clip.audio
+    audio = audio.with_start(new_start_time)
+    audio_clips.append(audio)
     # Extract the first frame
     frame_width, frame_height = video_clip.w, video_clip.h
-    # print("enerting process of video" )
+    print("enerting process of video" )
     if frame_height > frame_width:
         video_clip = video_clip.resized(height=850)
         frame_width, frame_height = video_clip.w, video_clip.h
@@ -106,8 +96,7 @@ def video_transition(i, video_path, total_duration, clips, new_start_time, audio
         center_position = ("center", abs((h / 2) - (frame_image.h / 2)))
     distance_to_center = start_position[1] - center_position[1]
     time_to_center = distance_to_center / speed
-    # print("animating the video")
-
+    print("animating the video")
     # animating shadow
     shadow = ImageClip("downloads/final_output.png")
     animated_shadow = (
@@ -130,6 +119,7 @@ def video_transition(i, video_path, total_duration, clips, new_start_time, audio
     animated_video = animated_video.with_effects([vfx.CrossFadeIn(0.2)])
     clips.append(animated_shadow)
     clips.append(animated_video)
-    # print(animated_video.duration)
+    print(animated_video.duration)
     total_duration += animated_video.duration
     return total_duration, clips, audio_clips
+
