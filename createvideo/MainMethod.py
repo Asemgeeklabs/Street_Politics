@@ -83,7 +83,7 @@ def body(body_list,clips,audio_clips,video_name):
     ### add audio to video ###
     video = video.with_audio(final_audio)
     output_path = f"downloads/{video_name}.mp4"
-    video.write_videofile(output_path, fps=90)
+    video.write_videofile(output_path, fps=30)
     path = upload_to_s3(output_path, f"street_politics/{video_name}.mp4")
     return path
 

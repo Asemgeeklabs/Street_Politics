@@ -6,7 +6,7 @@ def scaling_image(t,time_to_center):
     if t <= time_to_center:
         return 1
     else:
-        return (1 + ((t-time_to_center)*0.03))
+        return (1 + ((t-time_to_center)*0.045))
 
 def move_image(t, start_pos, center_pos, time_to_ctr, pause_dur, w, h):
     if t <= 0:
@@ -30,44 +30,82 @@ def move_shadow(t, start_pos, center_pos, time_to_ctr, pause_dur, w, h):
     else:
         return (w, h)
 
-def image_transition(image_path, total_duration, clips, new_start_time, pause_duration, w, h, speed): 
-    # print("enter image transition")
+def image_transition(image_path, total_duration, clips, new_start_time, pause_duration, w, h, speed):
     image = Image.open(image_path)
     image_width, image_height = image.size
-    if abs(image_width - image_height) > 100:
+    if abs(image_width - image_height) > 40:
         if image_height > image_width:
-            process_image_height(image_path, "downloads/final_output.png", target_height=550)
-            image_clip = ImageClip("downloads/final_output.png")
-            start_position = ("center", (h /2)-300)
-            center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
+            process_image_height(image_path, "final_output.png", target_height=500)
+            image_clip = ImageClip("final_output.png")
+            start_position = (abs((w / 2) - (image_clip.w / 2)), (h /2)-300)
+            center_position = (abs((w / 2) - (image_clip.w / 2)), abs((h / 2) - (image_clip.h / 2)))
         else:
-            process_image_width(image_path, "downloads/final_output.png", target_width=700)
-            image_clip = ImageClip("downloads/final_output.png")
+            process_image_width(image_path, "final_output.png", target_width=500)
+            image_clip = ImageClip("final_output.png")
             start_position = ("center", (h /2)-100)
             center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
     else:
-        process_image_width(image_path, "downloads/final_output.png", target_width=600)
-        image_clip = ImageClip("downloads/final_output.png")
+        process_image_width(image_path, "final_output.png", target_width=500)
+        image_clip = ImageClip("final_output.png")
         start_position = ("center", (h /2)-100)
         center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
-    # print("finishing processing image")
     distance_to_center = start_position[1] - center_position[1]
     time_to_center = distance_to_center / speed
-    
     # Bind the current iteration's variables
     animated_image = (
         image_clip
-        .with_position(lambda t, sp=start_position, cp=center_position,
-                       time_to_ctr=time_to_center, pause_dur=pause_duration
+        .with_position(lambda t, sp=start_position, cp=center_position, time_to_ctr=time_to_center,
+                        pause_dur=pause_duration,
                          : move_image(t, sp, cp, time_to_ctr, pause_dur, w, h))
         .with_start(new_start_time)
         .with_duration(pause_duration)
-        .resized(lambda t : scaling_image(t=t,time_to_center=time_to_center))
+        # .with_fps(60)
+        .resized(lambda t : scaling_image(t,time_to_center))
     )
     animated_image = animated_image.with_effects([vfx.CrossFadeIn(0.2)])
     clips.append(animated_image)
     total_duration += animated_image.duration
     return total_duration, clips
+
+# def image_transition(image_path, total_duration, clips, new_start_time, pause_duration, w, h, speed): 
+#     # print("enter image transition")
+#     image = Image.open(image_path)
+#     image_width, image_height = image.size
+#     if abs(image_width - image_height) > 40:
+#         if image_height > image_width:
+#             process_image_height(image_path, "downloads/final_output.png", target_height=250)
+#             image_clip = ImageClip("downloads/final_output.png")
+#             start_position = ("center", (h /2)-100)
+#             center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
+#         else:
+#             process_image_width(image_path, "downloads/final_output.png", target_width=700)
+#             image_clip = ImageClip("downloads/final_output.png")
+#             start_position = ("center", (h /2)-100)
+#             center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
+#     else:
+#         process_image_width(image_path, "downloads/final_output.png", target_width=600)
+#         image_clip = ImageClip("downloads/final_output.png")
+#         start_position = ("center", (h /2)-100)
+#         center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
+#     # print("finishing processing image")
+#     distance_to_center = start_position[1] - center_position[1]
+#     time_to_center = distance_to_center / speed
+    
+#     # Bind the current iteration's variables
+#     animated_image = (
+#         image_clip
+#         .with_position(lambda t, sp=start_position, cp=center_position,
+#                        time_to_ctr=time_to_center, pause_dur=pause_duration
+#                          : move_image(t, sp, cp, time_to_ctr, pause_dur, w, h))
+#         .with_start(new_start_time)
+#         .with_duration(pause_duration)
+#         .with_fps(90)
+#         .resized(lambda t : scaling_image(t=t,time_to_center=time_to_center))
+#     )
+#     animated_image = animated_image.with_effects([vfx.CrossFadeIn(0.2)])
+#     clips.append(animated_image)
+#     total_duration += animated_image.duration
+#     return total_duration, clips
 
 def video_transition(video_path, total_duration, clips, new_start_time, audio_clips, w, h, speed):
     print("entering video transition")
