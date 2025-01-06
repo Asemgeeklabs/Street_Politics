@@ -19,9 +19,9 @@ def Slide1(image_path,duration,text,start=0):
     background_image = ImageClip(image_path)
     ### check dimintions of image ###
     if background_image.h > background_image.w:
-        background_image = background_image.resized(width=1920).with_position(lambda t : image_move(t,duration=duration,x_start=500,y_start=0)).with_duration(duration+6.5).with_start(start)
+        background_image = background_image.resized(width=1920).with_position(lambda t : image_move(t,duration=duration,x_start=500,y_start=0)).with_duration(duration+6.5).with_start(start).with_fps(60)
     else:
-        background_image = background_image.resized(height=1280).with_position(lambda t : image_move(t,duration=duration,x_start=600,y_start=0)).with_duration(duration+6.5).with_start(start)
+        background_image = background_image.resized(height=1280).with_position(lambda t : image_move(t,duration=duration,x_start=600,y_start=0)).with_duration(duration+6.5).with_start(start).with_fps(60)
     #### add title text to video ####
     # check if text is longest than 25 charachter #
     if len(text) <= 40 :
