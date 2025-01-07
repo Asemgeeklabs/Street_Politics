@@ -6,7 +6,7 @@ def scaling_image(t,time_to_center):
     if t <= time_to_center:
         return 1
     else:
-        return (1 + ((t-time_to_center)*0.045))
+        return (1 + ((t-time_to_center)*0.035))
 
 def move_image(t, start_pos, center_pos, time_to_ctr, pause_dur, w, h):
     if t <= 0:
