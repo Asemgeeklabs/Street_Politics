@@ -33,19 +33,19 @@ def move_shadow(t, start_pos, center_pos, time_to_ctr, pause_dur, w, h):
 def image_transition(image_path, total_duration, clips, new_start_time, pause_duration, w, h, speed):
     image = Image.open(image_path)
     image_width, image_height = image.size
-    if abs(image_width - image_height) > 40:
+    if abs(image_width - image_height) > 50:
         if image_height > image_width:
-            process_image_height(image_path, "final_output.png", target_height=500)
+            process_image_height(image_path, "final_output.png", target_height=650)
             image_clip = ImageClip("final_output.png")
             start_position = (abs((w / 2) - (image_clip.w / 2)), (h /2)-300)
             center_position = (abs((w / 2) - (image_clip.w / 2)), abs((h / 2) - (image_clip.h / 2)))
         else:
-            process_image_width(image_path, "final_output.png", target_width=500)
+            process_image_width(image_path, "final_output.png", target_width=700)
             image_clip = ImageClip("final_output.png")
             start_position = ("center", (h /2)-100)
             center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
     else:
-        process_image_width(image_path, "final_output.png", target_width=500)
+        process_image_width(image_path, "final_output.png", target_width=600)
         image_clip = ImageClip("final_output.png")
         start_position = ("center", (h /2)-100)
         center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
