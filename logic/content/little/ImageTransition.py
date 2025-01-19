@@ -67,7 +67,7 @@ def image_transition(image_path, total_duration, clips, new_start_time, pause_du
             image_clip = ImageClip("downloads/processed_image.png").with_duration(pause_duration).with_fps(30)
         else:
             path , mask_path = process_image_width(image_path, "downloads/processed_image.png", target_width=1000)
-            image_clip = ImageClip("downloads/processed_image.png").with_duration(pause_duration).with_duration(pause_duration).with_fps(30)
+            image_clip = ImageClip("downloads/processed_image.png").with_duration(pause_duration).with_fps(30)
     else:
         path , mask_path = process_image_width(image_path, "downloads/processed_image.png", target_width=800)
         image_clip = ImageClip("downloads/processed_image.png").with_duration(pause_duration).with_fps(30)
