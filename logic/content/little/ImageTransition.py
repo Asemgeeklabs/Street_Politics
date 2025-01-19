@@ -1,7 +1,35 @@
 from moviepy import *
 from PIL import Image
-import requests
+import requests , cv2
+import numpy as np
 from .EditingOnImage import process_image_height, process_image_width
+
+def Zoom(clip,mode='in',position='center',speed=1):
+    fps = clip.fps
+    duration = clip.duration
+    total_frames = int(duration*fps)
+    def main(get_frame,t):
+        frame = get_frame(t)
+        h,w = frame.shape[:2]
+        i = t*fps
+        if mode == 'out':
+            i = total_frames-i
+        zoom = 1+(i*((0.1*speed)/total_frames))
+        positions = {'center':[(w-(w*zoom))/2,(h-(h*zoom))/2],
+                     'left':[0,(h-(h*zoom))/2],
+                     'right':[(w-(w*zoom)),(h-(h*zoom))/2],
+                     'top':[(w-(w*zoom))/2,0],
+                     'topleft':[0,0],
+                     'topright':[(w-(w*zoom)),0],
+                     'bottom':[(w-(w*zoom))/2,(h-(h*zoom))],
+                     'bottomleft':[0,(h-(h*zoom))],
+                     'bottomright':[(w-(w*zoom)),(h-(h*zoom))]}
+        tx,ty = positions[position]
+        M = np.array([[zoom,0,tx], [0,zoom,ty]])
+        frame = cv2.warpAffine(frame,M,(w,h))
+        return frame
+    return clip.transform(main)
+
 def scaling_image(t,time_to_center):
     if t <= time_to_center:
         return 1
@@ -33,22 +61,31 @@ def move_shadow(t, start_pos, center_pos, time_to_ctr, pause_dur, w, h):
 def image_transition(image_path, total_duration, clips, new_start_time, pause_duration, w, h, speed):
     image = Image.open(image_path)
     image_width, image_height = image.size
-    if abs(image_width - image_height) > 50:
+    if abs(image_width - image_height) > 70:
         if image_height > image_width:
-            process_image_height(image_path, "final_output.png", target_height=650)
-            image_clip = ImageClip("final_output.png")
-            start_position = (abs((w / 2) - (image_clip.w / 2)), (h /2)-300)
-            center_position = (abs((w / 2) - (image_clip.w / 2)), abs((h / 2) - (image_clip.h / 2)))
+            path , mask_path = process_image_height(image_path, "input/processed_image.png", target_height=800)
+            image_clip = ImageClip("input/processed_image.png").with_duration(pause_duration).with_fps(30)
         else:
-            process_image_width(image_path, "final_output.png", target_width=700)
-            image_clip = ImageClip("final_output.png")
-            start_position = ("center", (h /2)-100)
-            center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
+            path , mask_path = process_image_width(image_path, "input/processed_image.png", target_width=1000)
+            image_clip = ImageClip(path).with_duration(pause_duration).with_fps(30)
     else:
-        process_image_width(image_path, "final_output.png", target_width=600)
-        image_clip = ImageClip("final_output.png")
-        start_position = ("center", (h /2)-100)
-        center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
+        path , mask_path = process_image_width(image_path, "input/processed_image.png", target_width=800)
+        image_clip = ImageClip("input/processed_image.png").with_duration(pause_duration).with_fps(30)
+    #### define the start and center position ####
+    start_position = ("center", 150)
+    center_position = ("center", 0)
+    ### convert image mask with transparent layer to video ###
+    mask = ImageClip(mask_path,is_mask=True).with_duration(pause_duration).with_fps(30)
+    animated_mask = Zoom(mask,mode='in',position='center',speed=1)
+    animated_mask_path = "input/image_mask.mov"  # Set your desired output path
+    animated_mask.write_videofile(animated_mask_path , codec="prores_ks" ,preset="4444",fps=30)
+    ### convert image with transparent layer to video ###
+    animated_image = Zoom(image_clip,mode='in',position='center',speed=1)
+    animated_image_path = "input/image_transparent.mov"  # Set your desired output path
+    animated_image.write_videofile(animated_image_path, codec="prores_ks" ,preset="4444",fps=30)
+    # Load the video file
+    image_clip = VideoFileClip(animated_image_path,has_mask=True).with_mask(animated_mask) # has_mask=True ensures alpha transparency is handled
+    ####################################
     distance_to_center = start_position[1] - center_position[1]
     time_to_center = distance_to_center / speed
     # Bind the current iteration's variables
@@ -59,53 +96,13 @@ def image_transition(image_path, total_duration, clips, new_start_time, pause_du
                          : move_image(t, sp, cp, time_to_ctr, pause_dur, w, h))
         .with_start(new_start_time)
         .with_duration(pause_duration)
-        # .with_fps(60)
-        .resized(lambda t : scaling_image(t,time_to_center))
     )
     animated_image = animated_image.with_effects([vfx.CrossFadeIn(0.2)])
+    ### append image clip to clips list ###
     clips.append(animated_image)
+
     total_duration += animated_image.duration
     return total_duration, clips
-
-# def image_transition(image_path, total_duration, clips, new_start_time, pause_duration, w, h, speed): 
-#     # print("enter image transition")
-#     image = Image.open(image_path)
-#     image_width, image_height = image.size
-#     if abs(image_width - image_height) > 40:
-#         if image_height > image_width:
-#             process_image_height(image_path, "downloads/final_output.png", target_height=250)
-#             image_clip = ImageClip("downloads/final_output.png")
-#             start_position = ("center", (h /2)-100)
-#             center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
-#         else:
-#             process_image_width(image_path, "downloads/final_output.png", target_width=700)
-#             image_clip = ImageClip("downloads/final_output.png")
-#             start_position = ("center", (h /2)-100)
-#             center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
-#     else:
-#         process_image_width(image_path, "downloads/final_output.png", target_width=600)
-#         image_clip = ImageClip("downloads/final_output.png")
-#         start_position = ("center", (h /2)-100)
-#         center_position = ("center", abs((h / 2) - (image_clip.h / 2)))
-#     # print("finishing processing image")
-#     distance_to_center = start_position[1] - center_position[1]
-#     time_to_center = distance_to_center / speed
-    
-#     # Bind the current iteration's variables
-#     animated_image = (
-#         image_clip
-#         .with_position(lambda t, sp=start_position, cp=center_position,
-#                        time_to_ctr=time_to_center, pause_dur=pause_duration
-#                          : move_image(t, sp, cp, time_to_ctr, pause_dur, w, h))
-#         .with_start(new_start_time)
-#         .with_duration(pause_duration)
-#         .with_fps(90)
-#         .resized(lambda t : scaling_image(t=t,time_to_center=time_to_center))
-#     )
-#     animated_image = animated_image.with_effects([vfx.CrossFadeIn(0.2)])
-#     clips.append(animated_image)
-#     total_duration += animated_image.duration
-#     return total_duration, clips
 
 def video_transition(video_path, total_duration, clips, new_start_time, audio_clips, w, h, speed):
     print("entering video transition")
