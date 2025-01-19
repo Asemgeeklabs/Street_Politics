@@ -108,7 +108,7 @@ def add_transparent_layer(image_path, output_path, bordered_image_height ,canvas
     # Paste the original image onto the transparent canvas
     canvas.paste(image, (x_offset, y_offset), image)
     ### extract mask  and save it as image ###
-    mask_path = "input/extracted_mask.png"
+    mask_path = "downloads/extracted_mask.png"
     mask = canvas.split()[-1]
     mask = mask.convert("RGBA")
     mask.save(mask_path,format="PNG")
