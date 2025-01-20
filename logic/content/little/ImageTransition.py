@@ -144,7 +144,7 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
         frame_width, frame_height = video_clip.w, video_clip.h
         frame_image = Image.new("RGBA", (frame_width, frame_height), (0, 0, 0, 0))
         frame_image.save(output_video_path)
-        process_image_width(output_video_path, output_video_path, target_width=1080)
+        process_video_width(output_video_path, output_video_path, target_width=1080)
         frame_image = ImageClip(output_video_path)
         start_position = ("center", (h /2)-100)
         shadow_position = (420-21, start_position[1]-12)
