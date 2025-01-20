@@ -178,5 +178,7 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
     clips.append(animated_video)
     print(animated_video.duration)
     total_duration += animated_video.duration
+    ### remove local file ###
+    remove_local_file(video_path)
     return total_duration, clips, audio_clips
 
