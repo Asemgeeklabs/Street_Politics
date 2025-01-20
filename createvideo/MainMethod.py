@@ -51,15 +51,17 @@ def body(body_list,clips,audio_clips,video_name):
             audio_index += 1
             remove_local_file(local_filename) # remove file name of audio 
             ## looping on images ##
+            image_index = 1
             for image in images:
                 start_time_image = image["pause_duration"]
                 image_url = image["url"]
                 duration = image["duration"]
                 ### download image data ###
-                image_path = "downloads/content_image.jpg"          
+                image_path = f"downloads/content_image{image_index}.jpg"          
                 downloaded_image_path = download_image(url=image_url,filename=image_path)
-                total_duration, clips2 = image_transition(downloaded_image_path, total_duration, clips2, start_time_image, duration , w, h, speed)
+                total_duration, clips2 = image_transition(downloaded_image_path, total_duration, clips2, start_time_image, duration , w, h, speed,image_index)
                 remove_local_file(downloaded_image_path)
+                image_index += 1
     ## modify the duration of background video ##
     print(f"first total duration:{total_duration}")
     background_video_repeated = repeat_video(video=bg_video,total_duration=total_duration).with_start(start_log_bg-1)

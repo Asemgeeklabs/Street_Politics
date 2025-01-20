@@ -1,8 +1,18 @@
 from moviepy import *
 from PIL import Image
-import requests , cv2
+import cv2 , os
 import numpy as np
-from .EditingOnImage import process_image_height, process_image_width
+from .EditingOnImage import process_image_height, process_image_width 
+
+def remove_local_file(file_path):
+    try:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            print(f"Removed local file: {file_path}")
+        else:
+            print(f"File does not exist: {file_path}")
+    except Exception as e:
+        print(f"Error removing file {file_path}: {str(e)}")
 
 def Zoom(clip,mode='in',position='center',speed=1):
     fps = clip.fps
@@ -30,12 +40,6 @@ def Zoom(clip,mode='in',position='center',speed=1):
         return frame
     return clip.transform(main)
 
-def scaling_image(t,time_to_center):
-    if t <= time_to_center:
-        return 1
-    else:
-        return (1 + ((t-time_to_center)*0.025))
-
 def move_image(t, start_pos, center_pos, time_to_ctr, pause_dur, w, h):
     if t <= 0:
         return start_pos
@@ -58,50 +62,56 @@ def move_shadow(t, start_pos, center_pos, time_to_ctr, pause_dur, w, h):
     else:
         return (w, h)
 
-def image_transition(image_path, total_duration, clips, new_start_time, pause_duration, w, h, speed):
+def image_transition(image_path, total_duration, clips, new_start_time, pause_duration, w, h, speed,image_index):
     image = Image.open(image_path)
     image_width, image_height = image.size
+    output_path_img = f"downloads/processed_image{image_index}.png"
     if abs(image_width - image_height) > 50:
         if image_height > image_width:
-            path , mask_path = process_image_height(image_path, "downloads/processed_image.png", target_height=800)
-            image_clip = ImageClip("downloads/processed_image.png").with_duration(pause_duration).with_fps(30)
+            mask_path = process_image_height(image_path, output_path_img, image_index=image_index,target_height=800)
+            image_clip = ImageClip(output_path_img).with_duration(pause_duration).with_fps(30)
         else:
-            path , mask_path = process_image_width(image_path, "downloads/processed_image.png", target_width=1000)
-            image_clip = ImageClip("downloads/processed_image.png").with_duration(pause_duration).with_fps(30)
+            mask_path = process_image_width(image_path, output_path_img,image_index=image_index ,target_width=1000)
+            image_clip = ImageClip(output_path_img).with_duration(pause_duration).with_fps(30)
     else:
-        path , mask_path = process_image_width(image_path, "downloads/processed_image.png", target_width=800)
-        image_clip = ImageClip("downloads/processed_image.png").with_duration(pause_duration).with_fps(30)
+        mask_path = process_image_width(image_path, output_path_img, image_index=image_index,target_width=800)
+        image_clip = ImageClip(output_path_img).with_duration(pause_duration).with_fps(30)
     #### define the start and center position ####
     start_position = ("center", 150)
     center_position = ("center", 0)
     ### convert image mask with transparent layer to video ###
     mask = ImageClip(mask_path,is_mask=True).with_duration(pause_duration).with_fps(30)
     animated_mask = Zoom(mask,mode='in',position='center',speed=1)
-    animated_mask_path = "downloads/image_mask.mov"  # Set your desired output path
+    animated_mask_path = f"downloads/image_mask{image_index}.mov"  # Set your desired output path
     animated_mask.write_videofile(animated_mask_path , codec="prores_ks" ,preset="4444",fps=30)
     ### convert image with transparent layer to video ###
     animated_image = Zoom(image_clip,mode='in',position='center',speed=1)
-    animated_image_path = "downloads/image_transparent.mov"  # Set your desired output path
+    animated_image_path = f"downloads/image_transparent{image_index}.mov"  # Set your desired output path
     animated_image.write_videofile(animated_image_path, codec="prores_ks" ,preset="4444",fps=30)
     # Load the video file
-    image_clip = VideoFileClip(animated_image_path,has_mask=True).with_mask(animated_mask) # has_mask=True ensures alpha transparency is handled
+    image_clip_with_mask = VideoFileClip(animated_image_path,has_mask=True).with_mask(animated_mask) # has_mask=True ensures alpha transparency is handled
     ####################################
     distance_to_center = start_position[1] - center_position[1]
     time_to_center = distance_to_center / speed
     # Bind the current iteration's variables
-    animated_image = (
-        image_clip
+    final_animated_image = (
+        image_clip_with_mask
         .with_position(lambda t, sp=start_position, cp=center_position, time_to_ctr=time_to_center,
                         pause_dur=pause_duration,
                          : move_image(t, sp, cp, time_to_ctr, pause_dur, w, h))
         .with_start(new_start_time)
         .with_duration(pause_duration)
     )
-    animated_image = animated_image.with_effects([vfx.CrossFadeIn(0.2)])
+    final_animated_image = final_animated_image.with_effects([vfx.CrossFadeIn(0.2)])
     ### append image clip to clips list ###
-    clips.append(animated_image)
+    clips.append(final_animated_image)
 
-    total_duration += animated_image.duration
+    total_duration += final_animated_image.duration
+    ### remove files of image and its mask (image and .mov video) ###
+    remove_local_file(output_path_img)
+    remove_local_file(animated_mask_path)
+    remove_local_file(animated_image_path)
+    remove_local_file(mask_path)
     return total_duration, clips
 
 def video_transition(video_path, total_duration, clips, new_start_time, audio_clips, w, h, speed):

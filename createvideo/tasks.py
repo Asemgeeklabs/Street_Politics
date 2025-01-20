@@ -36,6 +36,7 @@ def bodytest(slides_list,body_list,webhook):
     intro_audio = AudioFileClip("downloads/intro_audio.mp3").with_start((slides_list[-1]["start_time"])+(slides_list[-1]["duration"]))
     list_audios_instance = add_audios(list_audios)
     list_audios_instance.append(intro_audio)
+    # list_audios_instance = []
     ### start body process ###
     path = body(body_list=body_list,clips=list_componant,audio_clips=list_audios_instance,video_name=video_name)
     url =  settings.MEDIA_URL + path
