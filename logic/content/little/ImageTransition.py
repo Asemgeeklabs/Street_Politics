@@ -2,7 +2,7 @@ from moviepy import *
 from PIL import Image
 import cv2 , os
 import numpy as np
-from .EditingOnImage import process_image_height, process_image_width 
+from .EditingOnImage import process_image_height, process_image_width , process_video_height , process_video_width
 
 def remove_local_file(file_path):
     try:
@@ -114,8 +114,9 @@ def image_transition(image_path, total_duration, clips, new_start_time, pause_du
     remove_local_file(mask_path)
     return total_duration, clips
 
-def video_transition(video_path, total_duration, clips, new_start_time, audio_clips, w, h, speed):
+def video_transition(video_path, total_duration, clips, new_start_time, audio_clips, w, h, speed,video_index):
     print("entering video transition")
+    video_path = f"downloads/video{video_index}.png"
     video_clip = VideoFileClip(video_path)
     pause_duration = video_clip.duration
     # audio clips
@@ -129,11 +130,11 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
         video_clip = video_clip.resized(height=850)
         frame_width, frame_height = video_clip.w, video_clip.h
         frame_image = Image.new("RGBA", (frame_width, frame_height), (0, 0, 0, 0))
-        frame_image.save("downloads/final_output.png")
-        frame_image = "downloads/final_output.png"
+        frame_image.save(video_path)
+        # frame_image = video_path
         
-        process_image_height(frame_image, "downloads/final_output.png", target_height=850)
-        frame_image = ImageClip("downloads/final_output.png")
+        process_video_height(video_path, video_path, target_height=850)
+        frame_image = ImageClip(video_path)
         start_position = (721, (h /2)-300)
         shadow_position = (721-21, start_position[1]-12)
         shadow_center = (721-21, abs((h / 2) - (frame_image.h / 2))-13)
@@ -142,10 +143,10 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
         video_clip = video_clip.resized(width=1080)
         frame_width, frame_height = video_clip.w, video_clip.h
         frame_image = Image.new("RGBA", (frame_width, frame_height), (0, 0, 0, 0))
-        frame_image.save("downloads/final_output.png")
-        frame_image = "downloads/final_output.png"
-        process_image_width(frame_image, "downloads/final_output.png", target_width=1080)
-        frame_image = ImageClip("downloads/final_output.png")
+        frame_image.save(video_path)
+        # frame_image = video_path
+        process_image_width(video_path, video_path, target_width=1080)
+        frame_image = ImageClip(video_path)
         start_position = ("center", (h /2)-100)
         shadow_position = (420-21, start_position[1]-12)
         shadow_center = (420 -21, abs((h / 2) - (frame_image.h / 2))-13)
@@ -154,7 +155,7 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
     time_to_center = distance_to_center / speed
     print("animating the video")
     # animating shadow
-    shadow = ImageClip("downloads/final_output.png")
+    shadow = ImageClip(video_path)
     animated_shadow = (
     shadow 
     .with_start(new_start_time)

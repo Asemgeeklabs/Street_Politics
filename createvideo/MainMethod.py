@@ -30,9 +30,9 @@ def body(body_list,clips,audio_clips,video_name):
             with open(local_filename, "wb") as file:
                 for chunk in response.iter_content(chunk_size=8192):  # Download in chunks
                     file.write(chunk)
-            video_index += 1
             new_start_time = item["start_time"]
-            total_duration, clips2, audio_clips = video_transition(local_filename, total_duration, clips2, new_start_time, audio_clips, w, h, speed)
+            total_duration, clips2, audio_clips = video_transition(local_filename, total_duration, clips2, new_start_time, audio_clips, w, h, speed ,video_index)
+            video_index += 1
             remove_local_file(local_filename)
         except:
             new_start_time = item["start_time"]
