@@ -20,6 +20,7 @@ def body(body_list,clips,audio_clips,video_name,webhook_url):
     total_duration = 0
     audio_index = 6
     video_index = 0
+    image_index = 1
     for item in body_list:
         try:
             video_url = item["url"]
@@ -51,7 +52,6 @@ def body(body_list,clips,audio_clips,video_name,webhook_url):
             audio_index += 1
             remove_local_file(local_filename) # remove file name of audio 
             ## looping on images ##
-            image_index = 1
             for image in images:
                 start_time_image = image["pause_duration"]
                 image_url = image["url"]
