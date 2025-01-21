@@ -1,14 +1,14 @@
 from logic.intro.intro_methods import *
 from logic.content.little.ImageTransition import *
 from logic.content.Rebeat_background import repeat_video
-import os
-import boto3
+import os , boto3
+from logic.content.send_percentage import render_video_with_progress
 
 ### list of all slide methods ###
 methods_list = [Slide1,Slide2,Slide3,Slide4]
 
 #### body creating method ###
-def body(body_list,clips,audio_clips,video_name):
+def body(body_list,clips,audio_clips,video_name,webhook_url):
     clips2 = []
     ### start of back ground video and logo ###
     start_log_bg = body_list[0]["start_time"]
@@ -85,7 +85,9 @@ def body(body_list,clips,audio_clips,video_name):
     ### add audio to video ###
     video = video.with_audio(final_audio)
     output_path = f"downloads/{video_name}.mp4"
-    video.write_videofile(output_path, fps=30)
+    # video.write_videofile(output_path, fps=30)
+    ### write video with send percentage to webhock ###
+    render_video_with_progress(video,output_path,webhook_url=webhook_url)
     path = upload_to_s3(output_path, f"street_politics/{video_name}.mp4")
     return path
 
