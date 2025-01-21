@@ -18,7 +18,9 @@ class WebhookLogger:
             self.send_update(percentage)
 
     def send_update(self, percentage):
-        data = {"progress": percentage}
+        data = {
+        "status":percentage
+        }
         try:
             response = requests.post(self.webhook_url, json=data)
             if response.status_code == 200:
