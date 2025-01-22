@@ -84,11 +84,14 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data):
     ### add audio ###
     final_audio = CompositeAudioClip(audio_clips)
     ### add audio to video ###
-    video = video.with_audio(final_audio)
+    # video = video.with_audio(final_audio)
+    audio_path = f"downloads/audio_path.mp3"
+    final_audio.write_audiofile(audio_path)
+    print(f"wrote the final audio")
     output_path = f"downloads/{video_name}.mp4"
     # video.write_videofile(output_path, fps=30)
     ### write video with send percentage to webhock ###
-    render_video_with_progress(video,output_path,webhook_url=webhook_url,meta_data=meta_data)
+    render_video_with_progress(video,output_path,audio_path,webhook_url=webhook_url,meta_data=meta_data)
     path = upload_to_s3(output_path, f"street_politics/{video_name}.mp4")
     return path
 

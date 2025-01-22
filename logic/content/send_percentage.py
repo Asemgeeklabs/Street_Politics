@@ -50,7 +50,7 @@ class CustomFFMPEG_VideoWriter(FFMPEG_VideoWriter):
         if self.webhook_logger:
             self.webhook_logger.callback(self.current_frame)
 
-def render_video_with_progress(video, output_path, webhook_url,meta_data):
+def render_video_with_progress(video, output_path,audio_path , webhook_url,meta_data):
     # Get total frames for progress calculation
     total_frames = int(video.fps * video.duration)
     
@@ -63,7 +63,7 @@ def render_video_with_progress(video, output_path, webhook_url,meta_data):
         size=video.size,
         fps=video.fps,
         codec="libx264",
-        # audiofile=None,
+        audiofile=audio_path,
         threads=4,
         webhook_logger=webhook_logger
     )
