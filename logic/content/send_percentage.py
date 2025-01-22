@@ -22,7 +22,7 @@ class WebhookLogger:
         if percentage % 10 == 0:
             payload = {
             "url": "",
-            "status":percentage,
+            "status":f"{percentage}%",
             "metadata" : self.meta_data
             }
             try:

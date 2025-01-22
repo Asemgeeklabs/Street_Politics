@@ -18,7 +18,7 @@ def add_audios(audios):
     ## looping on all audios ##
     i = 1
     for url , start in audios:
-        local_filename = f"downloads/sample{i}.mp3"
+        local_filename = f"downloads/audio{i}.mp3"
         response = requests.get(url, stream=True) 
         response.raise_for_status()  
         with open(local_filename, "wb") as file:
@@ -27,6 +27,7 @@ def add_audios(audios):
         audio = AudioFileClip(local_filename)
         audio = audio.with_start(start)
         list_audios.append(audio)
+        print(local_filename)
         i += 1
         remove_local_file(local_filename) 
     return list_audios

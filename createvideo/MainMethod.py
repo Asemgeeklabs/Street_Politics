@@ -48,6 +48,7 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data):
                 for chunk in response.iter_content(chunk_size=8192):  
                     file.write(chunk)
             audio = AudioFileClip(local_filename).with_start(new_start_time)
+            print(audio_index)
             audio_clips.append(audio)
             audio_index += 1
             remove_local_file(local_filename) # remove file name of audio 
