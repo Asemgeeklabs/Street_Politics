@@ -38,7 +38,7 @@ def bodytest(slides_list,body_list,webhook):
     list_audios_instance.append(intro_audio)
     # list_audios_instance = []
     ### start body process ###
-    path = body(body_list=body_list,clips=list_componant,audio_clips=list_audios_instance,video_name=video_name,webhook_url=webhook_url)
+    path = body(body_list=body_list,clips=list_componant,audio_clips=list_audios_instance,video_name=video_name,webhook_url=webhook_url, meta_data=meta_data)
     url =  settings.MEDIA_URL + path
     payload = {
         "url": url,

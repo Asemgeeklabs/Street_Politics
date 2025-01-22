@@ -8,7 +8,7 @@ from logic.content.send_percentage import render_video_with_progress
 methods_list = [Slide1,Slide2,Slide3,Slide4]
 
 #### body creating method ###
-def body(body_list,clips,audio_clips,video_name,webhook_url):
+def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data):
     clips2 = []
     ### start of back ground video and logo ###
     start_log_bg = body_list[0]["start_time"]
@@ -87,7 +87,7 @@ def body(body_list,clips,audio_clips,video_name,webhook_url):
     output_path = f"downloads/{video_name}.mp4"
     # video.write_videofile(output_path, fps=30)
     ### write video with send percentage to webhock ###
-    render_video_with_progress(video,output_path,webhook_url=webhook_url)
+    render_video_with_progress(video,output_path,webhook_url=webhook_url,meta_data=meta_data)
     path = upload_to_s3(output_path, f"street_politics/{video_name}.mp4")
     return path
 
