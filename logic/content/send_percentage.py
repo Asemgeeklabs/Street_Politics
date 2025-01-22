@@ -63,7 +63,7 @@ def render_video_with_progress(video, output_path, webhook_url,meta_data):
         size=video.size,
         fps=video.fps,
         codec="libx264",
-        audiofile=None,
+        # audiofile=None,
         threads=4,
         webhook_logger=webhook_logger
     )
