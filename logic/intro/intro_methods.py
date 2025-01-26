@@ -105,11 +105,11 @@ def Slide3(image_path,text,start,duration):
     layer4 = ImageClip('downloads/red.png').resized(height=1080).with_position(lambda t : slide3Trans(t=t,duration=duration,start=1920+500,x=0,y=0,horz_distance=1920+800)).with_duration(duration).with_start(start+2)
     ### text and background ###
     # check if text is longest than 25 charachter #
-    if len(text) <= 20 :
+    if len(text) <= 23 :
         font_size = 60
         margin = (0,40)
     else:
-        font_size = 35
+        font_size = 45
         margin = (0,40)
     Main_text = TextClip(
         text=text.upper(),  
