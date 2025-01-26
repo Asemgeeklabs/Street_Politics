@@ -142,7 +142,7 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
     # Extract the first frame
     frame_width, frame_height = video_clip.w, video_clip.h
     print("enerting process of video" )
-    if frame_height > frame_width:
+    if frame_height >= frame_width:
         video_clip = video_clip.resized(height=850)
         frame_width, frame_height = video_clip.w, video_clip.h
         frame_image = Image.new("RGBA", (frame_width, frame_height), (0, 0, 0, 0))
