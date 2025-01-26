@@ -1,8 +1,24 @@
 from moviepy import *
 from PIL import Image
-import cv2 , os
+import cv2 , os , yt_dlp
 import numpy as np
 from .EditingOnImage import process_image_height, process_image_width , process_video_height , process_video_width
+
+## method to download video ##
+def download_twitter_video(url, output_path):
+    try:
+        # Set options for yt-dlp
+        ydl_opts = {
+            "outtmpl": output_path,  # Save with video title
+        }
+
+        # Use yt-dlp to download the video
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+
+        print("video downloaded successfully.")
+    except Exception as e:
+        print(f"Error downloading video: {e}")
 
 def remove_local_file(file_path):
     try:
