@@ -142,7 +142,7 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
     # Extract the first frame
     frame_width, frame_height = video_clip.w, video_clip.h
     print("enerting process of video" )
-    if frame_height >= frame_width:
+    if frame_height > frame_width:
         video_clip = video_clip.resized(height=850)
         frame_width, frame_height = video_clip.w, video_clip.h
         frame_image = Image.new("RGBA", (frame_width, frame_height), (0, 0, 0, 0))
@@ -159,6 +159,22 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
         shadow_position = (721-21, start_position[1]-12)
         shadow_center = (721-21, abs((h / 2) - (frame_image.h / 2))-13)
         center_position = (721, abs((h / 2) - (frame_image.h / 2)))
+    elif frame_height == frame_width:
+        video_clip = video_clip.resized(height=850)
+        frame_width, frame_height = video_clip.w, video_clip.h
+        frame_image = Image.new("RGBA", (frame_width, frame_height), (0, 0, 0, 0))
+        print(f"new image width after :{frame_image.width}")
+        print(f"new image height after:{frame_image.height}")
+        frame_image.save(output_video_path)
+        process_video_height(output_video_path, output_video_path, target_height=850)
+        frame_image = ImageClip(output_video_path)
+        print(f"new processed image width after :{frame_image.w}")
+        print(f"new processed image height after:{frame_image.h}")
+        start_position = (535, (h /2)-300)
+        center_position = (535, abs((h / 2) - (frame_image.h / 2)))
+        shadow_position = (535-21, start_position[1]-12)
+        shadow_center = (535-21, abs((h / 2) - (frame_image.h / 2))-13)
+
     else:
         video_clip = video_clip.resized(width=1080)
         frame_width, frame_height = video_clip.w, video_clip.h
