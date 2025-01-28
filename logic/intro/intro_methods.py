@@ -147,14 +147,12 @@ def Slide4(image_path,text,start,duration):
     #### divide image 4 to three parts ####
     img4 = ImageClip(image_path).resized(width=1920)
     if img4.h > 1080:
-        startx = img4.h - 1080
-        end_height = img4.h
+        end_height = 1080
     else:
-        startx = 0 
         end_height = img4.h
-    img4_part1 = img4.cropped(x1=0,y1=startx,x2=640,y2=end_height).with_position(lambda t : effect_transition2(t=t,x=0,y=2280)).with_start(start+3).with_duration(duration-3)
-    img4_part2 = img4.cropped(x1=640,y1=startx,x2=1280,y2=end_height).with_position(lambda t : effect_transition2(t=t,x=640,y=2880)).with_start(start+3).with_duration(duration-3)
-    img4_part3 = img4.cropped(x1=1280,y1=startx,x2=1920,y2=end_height).with_position(lambda t : effect_transition2(t=t,x=1280,y=5280)).with_start(start+3).with_duration(duration-3)
+    img4_part1 = img4.cropped(x1=0,y1=0,x2=640,y2=end_height).with_position(lambda t : effect_transition2(t=t,x=0,y=2280)).with_start(start+3).with_duration(duration-3)
+    img4_part2 = img4.cropped(x1=640,y1=0,x2=1280,y2=end_height).with_position(lambda t : effect_transition2(t=t,x=640,y=2880)).with_start(start+3).with_duration(duration-3)
+    img4_part3 = img4.cropped(x1=1280,y1=0,x2=1920,y2=end_height).with_position(lambda t : effect_transition2(t=t,x=1280,y=5280)).with_start(start+3).with_duration(duration-3)
     ### shadow layers for part 1 , 2  ###
     # create shadow #
     shadow_image = Image.new("RGBA", (640, 1080), (0, 0, 0, 0))
