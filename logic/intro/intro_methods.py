@@ -171,7 +171,7 @@ def Slide4(image_path,text,start,duration):
         # text="justice system running on fumes".upper(),  
         text=text.upper(),  
         font_size= font_size,          
-        size = (700,300),
+        size = (1000,300),
         color=(248,229,229), 
         font="downloads/Helvetica-Bold.ttf",
         bg_color=None, 
