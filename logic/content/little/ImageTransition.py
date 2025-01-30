@@ -131,7 +131,7 @@ def image_transition(image_path, total_duration, clips, new_start_time, pause_du
     return total_duration, clips
 
 def video_transition(video_path, total_duration, clips, new_start_time, audio_clips, w, h, speed,video_index):
-    print("entering video transition")
+    print(f"entering video transition video_{video_index}")
     output_video_path = f"downloads/video_{video_index}.png"
     video_clip = VideoFileClip(video_path)
     pause_duration = video_clip.duration
