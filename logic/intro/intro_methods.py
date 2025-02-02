@@ -145,11 +145,17 @@ def Slide4(image_path,text,start,duration):
     right_layer_black = ColorClip((640,1080),color=(0,0,0)).with_position(lambda t : effect_transition2(t=t,x=1280,y=4280)).with_start(start+2).with_duration(duration-2)
 
     #### divide image 4 to three parts ####
-    img4 = ImageClip(image_path).resized(width=1920)
-    if img4.h > 1080:
-        end_height = 1080
+    img4 = ImageClip(image_path)
+    ### check if image is landscape ###
+    if img4.w > img4.h:
+        img4 = img4.resized(height=1080)
+        if img4.w < 1920:
+            img4 = img4.resized(height=1280)
+    ### image is square or portfolio ###
     else:
-        end_height = img4.h
+        img4 = img4.resized(width=1920)
+    ### final point that image stop at ###
+    end_height = 1080
     img4_part1 = img4.cropped(x1=0,y1=0,x2=640,y2=end_height).with_position(lambda t : effect_transition2(t=t,x=0,y=2280)).with_start(start+3).with_duration(duration-3)
     img4_part2 = img4.cropped(x1=640,y1=0,x2=1280,y2=end_height).with_position(lambda t : effect_transition2(t=t,x=640,y=2880)).with_start(start+3).with_duration(duration-3)
     img4_part3 = img4.cropped(x1=1280,y1=0,x2=1920,y2=end_height).with_position(lambda t : effect_transition2(t=t,x=1280,y=5280)).with_start(start+3).with_duration(duration-3)
