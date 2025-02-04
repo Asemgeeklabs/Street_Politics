@@ -86,4 +86,72 @@ def effect_transition2(t, x, y ,total_distance=None , slow_ratio=1):
         return (x, y - offset)
     
 
+
+##### for less duration #####
+def effect_transition_fast(t, x, y ,total_distance=None , slow_ratio=1):
+    # Total distance desired
+    if total_distance == None:
+        total_distance = y  # For ratio = 1
+
+    ## Calculation of fast motion ##
+    # for one duration #
+    single_duration = 5 / 16
+
+    # Proportional adjustment factor for all speeds
+    base_total = ((280 + 360 + 330 + 310 + 290 + 270 + 250 + 230 + 210 + 190 + 170 + 150 + 120 + 90 + 70 + 50)*single_duration) 
+    scale_factor = (total_distance / base_total)
+
+    # Adjust t by the slow_ratio to effectively slow down the motion
+    t = t / slow_ratio
+
+    if 0 <= t < (single_duration):
+        return (x, y - ((t * 280 * scale_factor) ))  # Adjusted initial speed
+    elif (single_duration) <= t < (2*single_duration):
+        offset = (280*single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - single_duration)* 360 * scale_factor) ))
+    elif (2*single_duration) <= t < (3*single_duration):
+        offset = ((280 + 360) * single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - 2*single_duration) * 330 * scale_factor) ))
+    elif (3*single_duration) <= t < (4*single_duration):
+        offset = ((280 + 360 + 330) * single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - 3*single_duration) * 310 * scale_factor) ))
+    elif (4*single_duration) <= t < (5*single_duration):
+        offset = ((280 + 360 + 330 + 310) * single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - 4*single_duration) * 290 * scale_factor) ))
+    elif (5*single_duration) <= t < (6*single_duration):
+        offset = ((280 + 360 + 330 + 310 + 290) * single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - 5*single_duration) * 270 * scale_factor) ))
+    elif (6*single_duration) <= t < (7*single_duration):
+        offset = ((280 + 360 + 330 + 310 + 290 + 270) * single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - 6*single_duration) * 250 * scale_factor) ))
+    elif (7*single_duration) <= t < (8*single_duration):
+        offset = ((280 + 360 + 330 + 310 + 290 + 270 + 250) * single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - 7*single_duration) * 230 * scale_factor) ))
+    elif (8*single_duration) <= t < (9*single_duration):
+        offset = ((280 + 360 + 330 + 310 + 290 + 270 + 250 + 230) * single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - 8*single_duration) * 210 * scale_factor) ))
+    elif (9*single_duration) <= t < (10*single_duration):
+        offset = ((280 + 360 + 330 + 310 + 290 + 270 + 250 + 230 + 210) * single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - 9*single_duration) * 190 * scale_factor) ))
+    elif (10*single_duration) <= t < (11*single_duration):
+        offset = ((280 + 360 + 330 + 310 + 290 + 270 + 250 + 230 + 210 + 190) * single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - 10*single_duration) * 170 * scale_factor) ))
+    elif (11*single_duration) <= t < (12*single_duration):
+        offset = ((280 + 360 + 330 + 310 + 290 + 270 + 250 + 230 + 210 + 190 + 170) * single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - 11*single_duration)* 150 * scale_factor) ))
+    elif (12*single_duration) <= t < (13*single_duration):
+        offset = ((280 + 360 + 330 + 310 + 290 + 270 + 250 + 230 + 210 + 190 + 170 + 150) * single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - 12*single_duration) * 120 * scale_factor) ))
+    elif (13*single_duration) <= t < (14*single_duration):
+        offset = ((280 + 360 + 330 + 310 + 290 + 270 + 250 + 230 + 210 + 190 + 170 + 150 + 120 ) * single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - 13*single_duration) * 90 * scale_factor) ))
+    elif (14*single_duration) <= t < (15*single_duration):
+        offset = ((280 + 360 + 330 + 310 + 290 + 270 + 250 + 230 + 210 + 190 + 170 + 150 + 120 + 90 ) * single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - 14*single_duration) * 70 * scale_factor) ))
+    elif (15*single_duration) <= t < (16*single_duration):
+        offset = ((280 + 360 + 330 + 310 + 290 + 270 + 250 + 230 + 210 + 190 + 170 + 150 + 120 + 90 + 70) * single_duration) * scale_factor 
+        return (x, (y - offset) - (((t - 15*single_duration) * 50 * scale_factor) ))
+    else:
+        offset = ((280 + 360 + 330 + 310 + 290 + 270 + 250 + 230 + 210 + 190 + 170 + 150 + 120 + 90 +  70 + 50) * single_duration ) * scale_factor 
+        return (x, y - offset)
     
