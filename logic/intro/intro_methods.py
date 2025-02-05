@@ -145,15 +145,15 @@ def Slide4(image_path,text,start,duration):
         slow_ratio_text = 2.4
 
 
-    gray_background = ColorClip((1920,1080),color=(80,64,64)).with_position(lambda t : method_motion(t=t,x=0,y=1080)).with_start(start).with_duration(duration)
-    left_layer_gray = ColorClip((640,1080),color=(70,54,53)).with_position(lambda t : method_motion(t=t,x=0,y=1480)).with_start(start).with_duration(duration)
-    middle_layer_gray = ColorClip((640,1080),color=(70,54,53)).with_position(lambda t : method_motion(t=t,x=640,y=1880)).with_start(start).with_duration(duration)
-    right_layer_offwhite = ColorClip((640,1080),color=(254,237,239)).with_position(lambda t : method_motion(t=t,x=1280,y=2280)).with_start(start).with_duration(duration)
-    right_layer_lightgray = ColorClip((640,1080),color=(205,188,187)).with_position(lambda t : method_motion(t=t,x=1280,y=3480)).with_start(start).with_duration(duration)
+    gray_background = ColorClip((1920,1080),color=(80,64,64)).with_position(lambda t : method_motion(t=t,x=0,y=1080)).with_start(start).with_duration(duration+8)
+    left_layer_gray = ColorClip((640,1080),color=(70,54,53)).with_position(lambda t : method_motion(t=t,x=0,y=1480)).with_start(start).with_duration(duration+8)
+    middle_layer_gray = ColorClip((640,1080),color=(70,54,53)).with_position(lambda t : method_motion(t=t,x=640,y=1880)).with_start(start).with_duration(duration+8)
+    right_layer_offwhite = ColorClip((640,1080),color=(254,237,239)).with_position(lambda t : method_motion(t=t,x=1280,y=2280)).with_start(start).with_duration(duration+8)
+    right_layer_lightgray = ColorClip((640,1080),color=(205,188,187)).with_position(lambda t : method_motion(t=t,x=1280,y=3480)).with_start(start).with_duration(duration+8)
     ############ black layers ################
-    left_layer_black = ColorClip((640,1080),color=(0,0,0)).with_position(lambda t : method_motion(t=t,x=0,y=1880)).with_start(start).with_duration(duration)
-    middle_layer_black = ColorClip((640,1080),color=(0,0,0)).with_position(lambda t : method_motion(t=t,x=640,y=2280)).with_start(start).with_duration(duration)
-    right_layer_black = ColorClip((640,1080),color=(0,0,0)).with_position(lambda t : method_motion(t=t,x=1280,y=4280)).with_start(start).with_duration(duration)
+    left_layer_black = ColorClip((640,1080),color=(0,0,0)).with_position(lambda t : method_motion(t=t,x=0,y=1880)).with_start(start).with_duration(duration+8)
+    middle_layer_black = ColorClip((640,1080),color=(0,0,0)).with_position(lambda t : method_motion(t=t,x=640,y=2280)).with_start(start).with_duration(duration+8)
+    right_layer_black = ColorClip((640,1080),color=(0,0,0)).with_position(lambda t : method_motion(t=t,x=1280,y=4280)).with_start(start).with_duration(duration+8)
 
     #### divide image 4 to three parts ####
     img4 = ImageClip(image_path)
@@ -167,17 +167,17 @@ def Slide4(image_path,text,start,duration):
         img4 = img4.resized(width=1920)
     ### final point that image stop at ###
     end_height = 1080
-    img4_part1 = img4.cropped(x1=0,y1=0,x2=640,y2=end_height).with_position(lambda t : method_motion(t=t,x=0,y=2280)).with_start(start).with_duration(duration)
-    img4_part2 = img4.cropped(x1=640,y1=0,x2=1280,y2=end_height).with_position(lambda t : method_motion(t=t,x=640,y=2880)).with_start(start).with_duration(duration)
-    img4_part3 = img4.cropped(x1=1280,y1=0,x2=1920,y2=end_height).with_position(lambda t : method_motion(t=t,x=1280,y=5280)).with_start(start).with_duration(duration)
+    img4_part1 = img4.cropped(x1=0,y1=0,x2=640,y2=end_height).with_position(lambda t : method_motion(t=t,x=0,y=2280)).with_start(start).with_duration(duration+8)
+    img4_part2 = img4.cropped(x1=640,y1=0,x2=1280,y2=end_height).with_position(lambda t : method_motion(t=t,x=640,y=2880)).with_start(start).with_duration(duration+8)
+    img4_part3 = img4.cropped(x1=1280,y1=0,x2=1920,y2=end_height).with_position(lambda t : method_motion(t=t,x=1280,y=5280)).with_start(start).with_duration(duration+8)
     ### shadow layers for part 1 , 2  ###
     # create shadow #
     shadow_image = Image.new("RGBA", (640, 1080), (0, 0, 0, 0))
     shadow_video_image = add_drop_shadow(shadow_image, offset=(0, 0), shadow_color=(0, 0, 0, 150), blur_radius=0)
     shadow_video_image.save("downloads/shadow_lide4.png")
     # images of shadow #
-    shadow1 = ImageClip("downloads/shadow_lide4.png").with_position(lambda t : method_motion(t=t,x=0,y=2280)).with_start(start).with_duration(duration)
-    shadow2 = ImageClip("downloads/shadow_lide4.png").with_position(lambda t : method_motion(t=t,x=640,y=2880)).with_start(start).with_duration(duration)
+    shadow1 = ImageClip("downloads/shadow_lide4.png").with_position(lambda t : method_motion(t=t,x=0,y=2280)).with_start(start).with_duration(duration+8)
+    shadow2 = ImageClip("downloads/shadow_lide4.png").with_position(lambda t : method_motion(t=t,x=640,y=2880)).with_start(start).with_duration(duration+8)
     ## text 4 ##
     # check if text is longest than 25 charachter #
     if len(text) <= 30 :
@@ -203,7 +203,7 @@ def Slide4(image_path,text,start,duration):
     #### text color base ####
     text_base_color = ColorClip((internal_text_width,20),color=(170,36,30)).with_position(lambda t : method_motion(t=t,x=340,y=3180,total_distance=(3180-(350+text4.h+50)),slow_ratio=slow_ratio_text+0.1)).with_start(start-4).with_duration(duration+8)
     ### intro clip of street politics ###
-    intro = VideoFileClip("downloads/Street_Politics_intro.mov", has_mask=True,target_resolution=(1920,1080)).with_start(start+(duration))
+    intro = VideoFileClip("downloads/Street_Politics_intro.mov", has_mask=True,target_resolution=(1920,1080)).with_start(start+(duration-2))
     return [gray_background, left_layer_gray,middle_layer_gray,right_layer_offwhite,right_layer_lightgray,left_layer_black,
             middle_layer_black , right_layer_black,img4_part1,img4_part2,img4_part3,shadow1,shadow2,text4,text_base_color,intro]
 
