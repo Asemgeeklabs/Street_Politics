@@ -165,16 +165,16 @@ def image_move(t,duration,x_start,y_start):
 ## method of moving text ##
 def text_move(t,duration):
     if t < 0:
-        return (-626,(video_height/2)-450)
+        return (-656,(video_height/2)-450)
     elif 0 <= t <= 1:
-        return (-626+(t*270),(video_height/2)-450)
+        return (-656+(t*270),(video_height/2)-450)
     elif 1 < t <= 2:
         x_offset = 270
-        return (-626+x_offset+((t-1)*220),(video_height/2)-450)
+        return (-656+x_offset+((t-1)*220),(video_height/2)-450)
     elif 2 < t <= 3:
         x_offset = 490
-        return (-626+x_offset+((t-2)*161),(video_height/2)-450)
+        return (-656+x_offset+((t-2)*161),(video_height/2)-450)
     elif 3 < t <= duration:
-        return (25,(video_height/2)-450)
+        return (0,(video_height/2)-450)
     else:
-        return effect_transition(t=(t-duration),x=25,y=((video_height/2)-450),total_distance=1080)
+        return effect_transition(t=(t-duration),x=0,y=((video_height/2)-450),total_distance=1080)

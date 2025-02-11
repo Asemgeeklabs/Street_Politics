@@ -26,8 +26,10 @@ def Slide1(image_path,duration,text,start=0):
     # check if text is longest than 25 charachter #
     if len(text) <= 40 :
         font_size = 95
+        margin=(90,10,100,10)
     else:
         font_size = 63
+        margin=(50,10) 
     Title = TextClip(
         text=text.upper(),  # The text to display
         font_size= font_size,            # Font size
@@ -37,7 +39,7 @@ def Slide1(image_path,duration,text,start=0):
         size=(626, 840)  ,  # Set the size of the clip
         method = 'caption',
         interline= 30,
-        margin=(50,10) ,
+        margin=margin ,
     )
         
     Title = Title.with_position(lambda t : text_move(t,duration=duration)).with_duration(duration+6.5).with_start(start)
@@ -206,5 +208,3 @@ def Slide4(image_path,text,start,duration):
     intro = VideoFileClip("downloads/Street_Politics_intro.mov", has_mask=True,target_resolution=(1920,1080)).with_start(start+(duration-2))
     return [gray_background, left_layer_gray,middle_layer_gray,right_layer_offwhite,right_layer_lightgray,left_layer_black,
             middle_layer_black , right_layer_black,img4_part1,img4_part2,img4_part3,shadow1,shadow2,text4,text_base_color,intro]
-
- 
