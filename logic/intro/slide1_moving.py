@@ -8,7 +8,7 @@ def resize_height_recur(image,current_height):
     print(f"new height:{image.h}")
     print(f"new width:{image.w}")
     if image.w < 1920:
-        return resize_height_recur(image,(current_height+50))
+        return resize_height_recur(image,(current_height+100))
     else:
         return image
 
