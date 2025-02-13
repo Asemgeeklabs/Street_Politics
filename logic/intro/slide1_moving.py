@@ -2,6 +2,16 @@ from moviepy import *
 import os
 import requests
 
+### recursion method for resizing ###
+def resize_height_recur(image,current_height):
+    image = image.resized(height=current_height+100)
+    print(f"new height:{image.h}")
+    print(f"new width:{image.w}")
+    if image.w < 1920:
+        return resize_height_recur(image,(current_height+50))
+    else:
+        return image
+
 def remove_local_file(file_path):
     try:
         if os.path.exists(file_path):

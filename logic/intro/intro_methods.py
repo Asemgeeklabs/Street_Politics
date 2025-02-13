@@ -161,9 +161,7 @@ def Slide4(image_path,text,start,duration):
     img4 = ImageClip(image_path)
     ### check if image is landscape ###
     if img4.w > img4.h:
-        img4 = img4.resized(height=1080)
-        if img4.w < 1920:
-            img4 = img4.resized(height=1280)
+        img4 = resize_height_recur(image=img4,current_height=1030)
     ### image is square or portfolio ###
     else:
         img4 = img4.resized(width=1920)
