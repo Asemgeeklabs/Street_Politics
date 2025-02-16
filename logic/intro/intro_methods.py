@@ -53,7 +53,9 @@ def Slide2(image_path,text,duration,start):
     layer1 = ImageClip('downloads/layer1.png').resized(width=1920).with_start(start).with_position(lambda t : effect_transition(t , x= 0, y=video_height+200)).with_duration(duration+2)
     layer2 = ImageClip('downloads/layer2.png').resized(width=1920).with_start(start+0.5).with_position(lambda t : effect_transition(t, x= 0, y=video_height+300)).with_duration(duration+2)
     ### second image ###
-    second_image = ImageClip(image_path).resized(width=1920)
+    # second_image = ImageClip(image_path).resized(width=1920)
+    second_image = ImageClip(image_path)
+    second_image = resize_height(img=second_image,current_width=1920)
     # second_image = ImageClip("downloads/hh.webp").resized(width=1920)
     second_image = second_image.with_start(start+0.5).with_duration(duration+8).with_position(lambda t : second_image_position(t=t,duration=duration,x=(get_postition(end_time=duration,distance=1920)),y=0)).resized(lambda t : zoom_in_effect(t,duration=duration))
     ## title 2 ##

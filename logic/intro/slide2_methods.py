@@ -23,6 +23,15 @@ def second_image_position(t,x,y,duration):
             start=x,
             y=y,
         )
+
+# check height of image #
+def resize_height(img,current_width):
+    img = img.resized(width=current_width)
+    if img.h < 1080:
+        return resize_height(img,current_width+100)
+    else:
+        return img
+
 # method for second text moving #
 def second_title_position(t,x,y,total_distance,initial_point,duration,center=False):
     if center == True:
