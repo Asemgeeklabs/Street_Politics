@@ -184,8 +184,10 @@ def Slide4(image_path,text,start,duration):
     # check if text is longest than 25 charachter #
     if len(text) <= 30 :
         font_size = 95
+        margin=(0,0,100,0)
     else:
         font_size = 63
+        margin = (80,0,100,0)
     text4 = TextClip(
         # text="justice system running on fumes".upper(),  
         text=text.upper(),  
@@ -197,7 +199,7 @@ def Slide4(image_path,text,start,duration):
         method = 'caption',
         interline= 30,
         horizontal_align="left",
-        # margin=(50,10) ,
+        margin = margin ,
     ).with_position(lambda t : method_motion(t=t,x=340,y=3180,total_distance=(3180-400),slow_ratio=slow_ratio_text)).with_start(start-4).with_duration(duration+6)
 
     ## internal text width of text4 ##
