@@ -19,45 +19,55 @@ def bodytest(slides_list,body_list,webhook):
     video_name = user_name + user_id
     list_componant = []
     list_audios = []
-    for index , slide in enumerate(slides_list):
-        print(f"method index :{methods_list[index]}")
-        text = slide["title"]
-        audio_url = slide["audioPath"]
-        duration = slide["duration"]
-        start = slide["start_time"]
-        image_url = slide["images"][0]["url"]
-        ## download image ##
-        response = requests.get(image_url)
-        image_data = BytesIO(response.content)
-        ### create slide content ###
-        componant = methods_list[index](image_path=image_data,duration=duration,text=text,start=start)
-        list_componant.extend(componant)
-        list_audios.append((audio_url,start))
-    intro_audio = AudioFileClip("downloads/intro_audio.mp3").with_start((slides_list[-1]["start_time"])+(slides_list[-1]["duration"]))
-    list_audios_instance = add_audios(list_audios)
-    list_audios_instance.append(intro_audio)
-    # list_audios_instance = []
-    ### start body process ###
-    path = body(body_list=body_list,clips=list_componant,audio_clips=list_audios_instance,video_name=video_name,webhook_url=webhook_url, meta_data=meta_data)
-    url =  settings.MEDIA_URL + path
-    payload = {
-        "url": url,
-        "status":"Done",
-        "metadata" : meta_data
-    }
     try:
-        response = requests.post(webhook_url, json=payload)
-        print("webhood done!")
-    except requests.exceptions.RequestException as e:
-        print(f"An error occurred while sending video notification: {e}")
+        for index , slide in enumerate(slides_list):
+            print(f"method index :{methods_list[index]}")
+            text = slide["title"]
+            audio_url = slide["audioPath"]
+            duration = slide["duration"]
+            start = slide["start_time"]
+            image_url = slide["images"][0]["url"]
+            ## download image ##
+            response = requests.get(image_url)
+            image_data = BytesIO(response.content)
+            ### create slide content ###
+            componant = methods_list[index](image_path=image_data,duration=duration,text=text,start=start)
+            list_componant.extend(componant)
+            list_audios.append((audio_url,start))
+        intro_audio = AudioFileClip("downloads/intro_audio.mp3").with_start((slides_list[-1]["start_time"])+(slides_list[-1]["duration"]))
+        list_audios_instance = add_audios(list_audios)
+        list_audios_instance.append(intro_audio)
+        # list_audios_instance = []
+        ### start body process ###
+        path = body(body_list=body_list,clips=list_componant,audio_clips=list_audios_instance,video_name=video_name,webhook_url=webhook_url, meta_data=meta_data)
+        url =  settings.MEDIA_URL + path
         payload = {
-            "status": "Failed",
+            "url": url,
+            "status":"Done",
             "metadata" : meta_data
         }
+        try:
+            response = requests.post(webhook_url, json=payload)
+            print("webhook done!")
+        except requests.exceptions.RequestException as e:
+            print(f"An error occurred while sending video notification: {e}")
+            payload = {
+                "status": "Failed",
+                "metadata" : meta_data
+            }
+            requests.post(webhook_url, json=payload)
+            print(f"An error occurred while sending video notification: {e}")
+        
+        b = is_last_task()
+    except Exception as e:
+        payload = {
+                "status": "Failed",
+                "metadata" : meta_data
+            }
         requests.post(webhook_url, json=payload)
-        print(f"An error occurred while sending video notification: {e}")
-    
-    b = is_last_task()
+        print(f"An error occurred while rendering video due to: {e}")
+        shutdown_instance()
+
     
 def shutdown_instance():
     print("Shutting down the instance...")

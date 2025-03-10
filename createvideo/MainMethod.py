@@ -67,6 +67,7 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data):
                 total_duration, clips2 = image_transition(downloaded_image_path, total_duration, clips2, start_time_image, duration , w, h, speed,image_index)
                 remove_local_file(downloaded_image_path)
                 image_index += 1
+                del image_url , start_time_image
     ## modify the duration of background video ##
     print(f"first total duration:{total_duration}")
     background_video_repeated = repeat_video(video=bg_video,total_duration=total_duration).with_start(start_log_bg-1)
@@ -97,6 +98,11 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data):
     ### write video with send percentage to webhock ###
     render_video_with_progress(video,output_path,audio_path,webhook_url=webhook_url,meta_data=meta_data)
     path = upload_to_s3(output_path, f"street_politics/{video_name}.mp4")
+    clips2.clear()
+    clips.clear()
+    audio_clips.clear()
+    body_list.clear()
+    del video_name , webhook_url , meta_data , audio_index , video_index , image_index , bg_video , start_log_bg
     return path
 
 def upload_to_s3(file_path, s3_path):
