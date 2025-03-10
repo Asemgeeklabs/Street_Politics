@@ -19,6 +19,7 @@ def bodytest(slides_list,body_list,webhook):
     video_name = user_name + user_id
     list_componant = []
     list_audios = []
+    print(f"start video of: {video_name}")
     try:
         for index , slide in enumerate(slides_list):
             print(f"method index :{methods_list[index]}")

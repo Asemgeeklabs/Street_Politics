@@ -103,6 +103,7 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data):
     audio_clips.clear()
     body_list.clear()
     del video_name , webhook_url , meta_data , audio_index , video_index , image_index , bg_video , start_log_bg
+    remove_local_file(output_path)
     return path
 
 def upload_to_s3(file_path, s3_path):
