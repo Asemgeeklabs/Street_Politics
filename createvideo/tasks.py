@@ -67,7 +67,7 @@ def bodytest(slides_list,body_list,webhook):
             }
         requests.post(webhook_url, json=payload)
         print(f"An error occurred while rendering video due to: {e}")
-        shutdown_instance()
+        b = is_last_task()
 
     
 def shutdown_instance():
