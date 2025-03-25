@@ -146,6 +146,10 @@ with open(local_filename, "wb") as file:
 """
 # ### method of converting image to red RGB ###
 def Red_image(path):
+    # Check if path is a file object and get its name if so
+    if hasattr(path, 'name'):
+        path = path.name
+        
     image = Image.open(path)
     # Ensure the image is in RGB mode
     image = image.convert("RGB")
