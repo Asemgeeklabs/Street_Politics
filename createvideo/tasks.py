@@ -57,7 +57,6 @@ def bodytest(slides_list, body_list, webhook):
                 
                 # Clean up
                 image_data.close()
-                image_data_copy.close()
             except Exception as e:
                 print(f"Error processing slide {index}: {str(e)}")
                 traceback.print_exc()
