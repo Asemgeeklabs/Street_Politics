@@ -1,6 +1,7 @@
 from moviepy import *
 from PIL import Image 
 import requests
+from io import BytesIO
 
 ## method for transition from bottom to top smoothly ##
 def effect_transition(t, x, y ,total_distance=None , slow_ratio=1):
@@ -146,17 +147,22 @@ with open(local_filename, "wb") as file:
 """
 # ### method of converting image to red RGB ###
 def Red_image(path):
-    # Check if path is a file object and get its name if so
-    if hasattr(path, 'name'):
-        path_str = path.name
-        # Make sure to close the file if it's open to avoid resource leaks
-        if not path.closed:
-            path.close()
+    # For BytesIO objects, we need to work with the content directly
+    if hasattr(path, 'read') and hasattr(path, 'seek'):
+        # Create a copy of the content before any operations
+        if hasattr(path, 'getvalue'):  # BytesIO object
+            image_data = path.getvalue()
+            image = Image.open(BytesIO(image_data))
+        else:  # File object
+            current_pos = path.tell()
+            path.seek(0)
+            image_data = path.read()
+            # Don't close the original file here
+            image = Image.open(BytesIO(image_data))
     else:
+        # Regular path string
         path_str = path
-        
-    # Open the image using the path string
-    image = Image.open(path_str)
+        image = Image.open(path_str)
     
     # Ensure the image is in RGB mode
     image = image.convert("RGB")
