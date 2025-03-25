@@ -1,7 +1,6 @@
 from moviepy import *
 from PIL import Image 
 import requests
-from io import BytesIO
 
 ## method for transition from bottom to top smoothly ##
 def effect_transition(t, x, y ,total_distance=None , slow_ratio=1):
@@ -147,23 +146,7 @@ with open(local_filename, "wb") as file:
 """
 # ### method of converting image to red RGB ###
 def Red_image(path):
-    # For BytesIO objects, we need to work with the content directly
-    if hasattr(path, 'read') and hasattr(path, 'seek'):
-        # Create a copy of the content before any operations
-        if hasattr(path, 'getvalue'):  # BytesIO object
-            image_data = path.getvalue()
-            image = Image.open(BytesIO(image_data))
-        else:  # File object
-            current_pos = path.tell()
-            path.seek(0)
-            image_data = path.read()
-            # Don't close the original file here
-            image = Image.open(BytesIO(image_data))
-    else:
-        # Regular path string
-        path_str = path
-        image = Image.open(path_str)
-    
+    image = Image.open(path)
     # Ensure the image is in RGB mode
     image = image.convert("RGB")
     # Split the image into R, G, B channels
@@ -250,4 +233,3 @@ def slide3Trans(t,start, y , x ,duration,horz_distance=1920,vert_distance=None ,
         return sliding_move(t=t,start=start,y=y,total_distance=horz_distance)
     else:
         return effect_transition(t=(t-duration),x=x,y=y,total_distance=vert_distance,slow_ratio=slow_ratio)
-
