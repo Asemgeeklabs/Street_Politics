@@ -148,9 +148,16 @@ with open(local_filename, "wb") as file:
 def Red_image(path):
     # Check if path is a file object and get its name if so
     if hasattr(path, 'name'):
-        path = path.name
+        path_str = path.name
+        # Make sure to close the file if it's open to avoid resource leaks
+        if not path.closed:
+            path.close()
+    else:
+        path_str = path
         
-    image = Image.open(path)
+    # Open the image using the path string
+    image = Image.open(path_str)
+    
     # Ensure the image is in RGB mode
     image = image.convert("RGB")
     # Split the image into R, G, B channels
