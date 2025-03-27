@@ -37,7 +37,7 @@ def bodytest(slides_list,body_list,webhook):
             list_audios.append((audio_url,start))
         ### intro clip of street politics ###
         intro = VideoFileClip("downloads/Street_Politics_intro.mov", has_mask=True,target_resolution=(1920,1080)).with_start(((slides_list[-1]["start_time"])+(slides_list[-1]["duration"]))-2)
-        list_componant.extend(intro)
+        list_componant.append(intro)
         intro_audio = AudioFileClip("downloads/intro_audio.mp3").with_start((slides_list[-1]["start_time"])+(slides_list[-1]["duration"]))
         list_audios_instance = add_audios(list_audios)
         list_audios_instance.append(intro_audio)
