@@ -9,7 +9,7 @@ import traceback
 import shutil
 import tempfile
 import contextlib
-from clean_old_logs import clear_celery_logs
+from .clean_old_logs import clear_celery_logs
 
 ### list of all slide methods ###
 methods_list = [Slide1, Slide2, Slide3, Slide4]
