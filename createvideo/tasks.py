@@ -4,7 +4,6 @@ from .MainMethod import body
 from django.conf import settings
 from io import BytesIO
 import boto3, redis
-from .clean_old_logs import clear_celery_logs
 
 ### list of all slide methods ###
 methods_list = [Slide1,Slide2,Slide3,Slide4]
@@ -71,13 +70,6 @@ def bodytest(slides_list,body_list,webhook):
         requests.post(webhook_url, json=payload)
         print(f"An error occurred while rendering video due to: {e}")
         b = is_last_task()
-    finally:
-        try:
-            print("start cleaning logs!")
-            clear_celery_logs()
-        except Exception as e:
-            print(f"exception is {e}")
-            print("cleaning logs function not work well ........")
             
 
     
