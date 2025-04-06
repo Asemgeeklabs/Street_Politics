@@ -75,7 +75,8 @@ def bodytest(slides_list,body_list,webhook):
         try:
             print("start cleaning logs!")
             clear_celery_logs()
-        except:
+        except Exception as e:
+            print(f"exception is {e}")
             print("cleaning logs function not work well ........")
             
 
