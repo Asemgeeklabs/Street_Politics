@@ -9,6 +9,7 @@ import traceback
 import shutil
 import tempfile
 import contextlib
+from clean_old_logs import clear_celery_logs
 
 ### list of all slide methods ###
 methods_list = [Slide1, Slide2, Slide3, Slide4]
@@ -144,6 +145,13 @@ def bodytest(slides_list, body_list, webhook):
                     clip.close()
             except Exception as cleanup_error:
                 print(f"Error during clip cleanup: {str(cleanup_error)}")
+    
+    try:
+        print("start cleaning logs!")
+        clear_celery_logs()
+    except:
+        print("cleaning logs function not work well ........")
+        
 
 def shutdown_instance():
     print("Shutting down the instance...")
