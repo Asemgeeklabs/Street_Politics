@@ -206,7 +206,5 @@ def Slide4(image_path,text,start,duration):
     internal_text_width = get_internal_text_width(text=text4)
     #### text color base ####
     text_base_color = ColorClip((internal_text_width,20),color=(170,36,30)).with_position(lambda t : method_motion(t=t,x=340,y=3180,total_distance=(3180-(350+text4.h+50)),slow_ratio=slow_ratio_text+0.1)).with_start(start-4).with_duration(duration+6)
-    ### intro clip of street politics ###
-    intro = VideoFileClip("downloads/Street_Politics_intro.mov", has_mask=True,target_resolution=(1920,1080)).with_start(start+(duration-2))
     return [gray_background, left_layer_gray,middle_layer_gray,right_layer_offwhite,right_layer_lightgray,left_layer_black,
-            middle_layer_black , right_layer_black,img4_part1,img4_part2,img4_part3,shadow1,shadow2,text4,text_base_color,intro]
+            middle_layer_black , right_layer_black,img4_part1,img4_part2,img4_part3,shadow1,shadow2,text4,text_base_color]
