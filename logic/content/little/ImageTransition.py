@@ -78,10 +78,10 @@ def move_shadow(t, start_pos, center_pos, time_to_ctr, pause_dur, w, h):
     else:
         return (w, h)
 
-def image_transition(image_path, total_duration, clips, new_start_time, pause_duration, w, h, speed,image_index):
+def image_transition(image_path, total_duration, clips, new_start_time, pause_duration, w, h, speed,image_index,dir_path):
     image = Image.open(image_path)
     image_width, image_height = image.size
-    output_path_img = f"downloads/processed_image{image_index}.png"
+    output_path_img = f"{dir_path}/processed_image{image_index}.png"
     if abs(image_width - image_height) > 50:
         if image_height > image_width:
             mask_path = process_image_height(image_path, output_path_img, image_index=image_index,target_height=800)
@@ -98,11 +98,11 @@ def image_transition(image_path, total_duration, clips, new_start_time, pause_du
     ### convert image mask with transparent layer to video ###
     mask = ImageClip(mask_path,is_mask=True).with_duration(pause_duration).with_fps(30)
     animated_mask = Zoom(mask,mode='in',position='center',speed=1)
-    animated_mask_path = f"downloads/image_mask{image_index}.mov"  # Set your desired output path
+    animated_mask_path = f"{dir_path}/image_mask{image_index}.mov"  # Set your desired output path
     animated_mask.write_videofile(animated_mask_path , codec="prores_ks" ,preset="4444",fps=30)
     ### convert image with transparent layer to video ###
     animated_image = Zoom(image_clip,mode='in',position='center',speed=1)
-    animated_image_path = f"downloads/image_transparent{image_index}.mov"  # Set your desired output path
+    animated_image_path = f"{dir_path}/image_transparent{image_index}.mov"  # Set your desired output path
     animated_image.write_videofile(animated_image_path, codec="prores_ks" ,preset="4444",fps=30)
     # Load the video file
     image_clip_with_mask = VideoFileClip(animated_image_path,has_mask=True).with_mask(animated_mask) # has_mask=True ensures alpha transparency is handled
@@ -130,9 +130,9 @@ def image_transition(image_path, total_duration, clips, new_start_time, pause_du
     remove_local_file(mask_path)
     return total_duration, clips
 
-def video_transition(video_path, total_duration, clips, new_start_time, audio_clips, w, h, speed,video_index):
+def video_transition(video_path, total_duration, clips, new_start_time, audio_clips, w, h, speed,video_index,dir_path):
     print(f"entering video transition video_{video_index}")
-    output_video_path = f"downloads/video_{video_index}.png"
+    output_video_path = f"{dir_path}/video_{video_index}.png"
     video_clip = VideoFileClip(video_path)
     pause_duration = video_clip.duration
     # audio clips

@@ -3,7 +3,9 @@ from logic.intro.intro_methods import *
 from .MainMethod import body
 from django.conf import settings
 from io import BytesIO
-import boto3, redis
+import boto3, redis , os
+from datetime import datetime
+
 
 ### list of all slide methods ###
 methods_list = [Slide1,Slide2,Slide3,Slide4]
@@ -17,6 +19,13 @@ def bodytest(slides_list,body_list,webhook):
     user_email = meta_data["employee"]
     user_name =  user_email.split('@')[0]
     video_name = user_name + user_id
+    ## create new dirictory to add temperary footages of video ##
+    # Get current time
+    now = datetime.now()
+    # Format time as HH:MM:SS
+    current_time = now.strftime("%H:%M:%S")
+    dir_path = os.path.join("downloads",f"{user_name}_{current_time}") 
+    os.makedirs(dir_path, exist_ok=True)
     list_componant = []
     list_audios = []
     print(f"start video of: {video_name}")
@@ -32,7 +41,7 @@ def bodytest(slides_list,body_list,webhook):
             response = requests.get(image_url)
             image_data = BytesIO(response.content)
             ### create slide content ###
-            componant = methods_list[index](image_path=image_data,duration=duration,text=text,start=start)
+            componant = methods_list[index](image_path=image_data,duration=duration,text=text,start=start,dir_path=dir_path )
             list_componant.extend(componant)
             list_audios.append((audio_url,start))
         ### intro clip of street politics ###
@@ -42,7 +51,7 @@ def bodytest(slides_list,body_list,webhook):
         list_audios_instance = add_audios(list_audios)
         list_audios_instance.append(intro_audio)
         ### start body process ###
-        path = body(body_list=body_list,clips=list_componant,audio_clips=list_audios_instance,video_name=video_name,webhook_url=webhook_url, meta_data=meta_data)
+        path = body(body_list=body_list,clips=list_componant,audio_clips=list_audios_instance,video_name=video_name,webhook_url=webhook_url, meta_data=meta_data,dir_path=dir_path)
         url =  settings.MEDIA_URL + path
         payload = {
             "url": url,

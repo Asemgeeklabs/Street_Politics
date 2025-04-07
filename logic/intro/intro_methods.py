@@ -9,7 +9,7 @@ from .slide4_moving import *
 
 ################################################
 ############# function of slide 1 ##############
-def Slide1(image_path,duration,text,start=0):
+def Slide1(image_path,duration,text,start=0,dir_path=None):
     ## entro red background ##
     intro_bg = ImageClip("downloads/intro.png").resized(width=3420)
     intro_bg = intro_bg.cropped(x1=0,y1=490,x2=intro_bg.w,y2=(intro_bg.h-132))
@@ -47,7 +47,7 @@ def Slide1(image_path,duration,text,start=0):
 
 ################################################
 ############# function of slide 2 ##############
-def Slide2(image_path,text,duration,start):
+def Slide2(image_path,text,duration,start,dir_path=None):
     ## layers for transition ##
     black = ImageClip('downloads/black.jpg').resized(width=1920).with_start(start).with_position(lambda t : effect_transition(t, x= 0, y=video_height ) ).with_duration(duration+2)
     layer1 = ImageClip('downloads/layer1.png').resized(width=1920).with_start(start).with_position(lambda t : effect_transition(t , x= 0, y=video_height+200)).with_duration(duration+2)
@@ -87,10 +87,10 @@ def Slide2(image_path,text,duration,start):
 
 ################################################
 ############# function of slide 3 ##############
-def Slide3(image_path,text,start,duration):
+def Slide3(image_path,text,start,duration,dir_path=None):
     slided_image = ImageClip(image_path)
     ## convert image to red image ##
-    second_image_path = Red_image(image_path)
+    second_image_path = Red_image(image_path,dir_path=dir_path)
     ## first image ##
     if slided_image.w >= slided_image.h: 
         ## resize image ##
@@ -137,7 +137,7 @@ def Slide3(image_path,text,start,duration):
 
 ################################################
 ############# function of slide 4 ##############
-def Slide4(image_path,text,start,duration):
+def Slide4(image_path,text,start,duration,dir_path=None):
     ### check if duration is less than 9 seconds ###
     if duration < 9.5:
         method_motion = effect_transition_fast

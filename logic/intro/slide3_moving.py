@@ -123,10 +123,10 @@ def sliding_move(t, start, y, total_distance=1920):
         offset = (280 + (360 + 330 + 310 + 290 + 270 + 250 + 230 + 210 + 190 + 170 + 150 + 120 + 90 + 70 + 50) * 0.3) * scale_factor
         return (start - offset, y)
 
-def download_image(url,filename=None):
+def download_image(url,filename=None,dir_path=None):
     ### path that image saved on it ###
     if filename == None:
-        filename = "downloads/red_image_downloaded.jpg"
+        filename = f"{dir_path}/red_image_downloaded.jpg"
     # Send a GET request to the URL
     response = requests.get(url)
     # Check if the request was successful
@@ -145,7 +145,7 @@ with open(local_filename, "wb") as file:
                 file.write(chunk)
 """
 # ### method of converting image to red RGB ###
-def Red_image(path):
+def Red_image(path,dir_path):
     image = Image.open(path)
     # Ensure the image is in RGB mode
     image = image.convert("RGB")
@@ -154,7 +154,7 @@ def Red_image(path):
     # Create a new image with only the red channel
     # Set the green and blue channels to 0
     red_image = Image.merge("RGB", (r, Image.new("L", r.size, 0), Image.new("L", r.size, 0)))
-    output_path = "downloads/red_image.jpg"
+    output_path = f"{dir_path}/red_image.jpg"
     # Save or display the image
     red_image.save(output_path)
     return output_path

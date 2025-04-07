@@ -1,14 +1,14 @@
 from logic.intro.intro_methods import *
 from logic.content.little.ImageTransition import *
 from logic.content.Rebeat_background import repeat_video
-import os , boto3
+import os , boto3 , shutil
 from logic.content.send_percentage import render_video_with_progress
 
 ### list of all slide methods ###
 methods_list = [Slide1,Slide2,Slide3,Slide4]
 
 #### body creating method ###
-def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data):
+def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data,dir_path):
     clips2 = []
     ### start of back ground video and logo ###
     start_log_bg = body_list[0]["start_time"]
@@ -24,7 +24,7 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data):
     for item in body_list:
         try:
             video_url = item["url"]
-            local_filename = f"downloads/video{video_index}.mp4"
+            local_filename = f"{dir_path}/video{video_index}.mp4"
             ## download vide ##
             if "x.com" in video_url:
                 download_twitter_video(url=video_url,output_path=local_filename)
@@ -45,7 +45,7 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data):
             duration = item["duration"]
             images = item["images"]
             ### download audio ###
-            local_filename = f"downloads/audio{audio_index}.mp3"
+            local_filename = f"{dir_path}/audio{audio_index}.mp3"
             response = requests.get(audioPath, stream=True) 
             response.raise_for_status()  
             with open(local_filename, "wb") as file:
@@ -62,9 +62,9 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data):
                 image_url = image["url"]
                 duration = image["duration"]
                 ### download image data ###
-                image_path = f"downloads/content_image{image_index}.jpg"          
-                downloaded_image_path = download_image(url=image_url,filename=image_path)
-                total_duration, clips2 = image_transition(downloaded_image_path, total_duration, clips2, start_time_image, duration , w, h, speed,image_index)
+                image_path = f"{dir_path}/content_image{image_index}.jpg"          
+                downloaded_image_path = download_image(url=image_url,filename=image_path,dir_path=dir_path)
+                total_duration, clips2 = image_transition(downloaded_image_path, total_duration, clips2, start_time_image, duration , w, h, speed,image_index,dir_path=dir_path)
                 remove_local_file(downloaded_image_path)
                 image_index += 1
                 del image_url , start_time_image
@@ -90,10 +90,10 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data):
     final_audio = CompositeAudioClip(audio_clips)
     ### add audio to video ###
     # video = video.with_audio(final_audio)
-    audio_path = f"downloads/audio_path.mp3"
+    audio_path = f"{dir_path}/audio_path.mp3"
     final_audio.write_audiofile(audio_path)
     print(f"wrote the final audio")
-    output_path = f"downloads/{video_name}.mp4"
+    output_path = f"{dir_path}/{video_name}.mp4"
     # video.write_videofile(output_path, fps=30)
     ### write video with send percentage to webhock ###
     render_video_with_progress(video,output_path,audio_path,webhook_url=webhook_url,meta_data=meta_data)
@@ -104,6 +104,7 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data):
     body_list.clear()
     del video_name , webhook_url , meta_data , audio_index , video_index , image_index , bg_video , start_log_bg
     remove_local_file(output_path)
+    remove_folder(dir_path)
     return path
 
 def upload_to_s3(file_path, s3_path):
@@ -115,4 +116,17 @@ def upload_to_s3(file_path, s3_path):
         return s3_path
     except Exception as e:
         print(f"Error uploading {file_path} to S3: {str(e)}")
+
+## method folder function ##
+def remove_folder(folder_path):
+    """
+    Remove the entire folder and its contents.
+
+    :param folder_path: Path to the folder to be removed
+    """
+    if os.path.exists(folder_path):
+        shutil.rmtree(folder_path)
+        print(f"Folder '{folder_path}' has been removed.")
+    else:
+        print(f"Folder '{folder_path}' does not exist.")
 

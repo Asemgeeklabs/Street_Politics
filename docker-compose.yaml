@@ -12,11 +12,10 @@ services:
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
     logging:
-      driver: "json-file"  # Log driver is json-file (default for Docker)
+      driver: "json-file"
       options:
-        max-size: "10m"   # Maximum size for log files
-        max-file: "1"     # Keep a maximum of 3 rotated log files
-
+        max-size: "10m"
+        max-file: "1"
   redis:
     image: redis:latest
     container_name: redis
@@ -35,11 +34,15 @@ services:
       options:
         max-size: "10m"
         max-file: "1"
-
-  celery:
+  celery_worker1:
     image: street_politics-django:latest
-    container_name: celery_worker
-    command: celery -A street_politics worker --pool=solo --loglevel=info
+    container_name: celery_worker1
+    command: >
+      celery -A street_politics worker
+      --loglevel=info
+      --concurrency=2
+      --hostname=worker1@%h
+      --logformat="%(asctime)s [%(processName)s:%(process)d] %(levelname)s %(message)s"
     depends_on:
       - redis
     environment:
@@ -50,6 +53,24 @@ services:
       options:
         max-size: "10m"
         max-file: "1"
-
+  celery_worker2:
+    image: street_politics-django:latest
+    container_name: celery_worker2
+    command: >
+      celery -A street_politics worker
+      --loglevel=info
+      --concurrency=2
+      --hostname=worker2@%h
+      --logformat="%(asctime)s [%(processName)s:%(process)d] %(levelname)s %(message)s"
+    depends_on:
+      - redis
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "1"
 volumes:
   redis_data:
