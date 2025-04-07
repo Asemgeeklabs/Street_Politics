@@ -20,30 +20,24 @@ services:
 
   celery_worker1:
     image: street_politics-django:latest
-    container_name: celery_worker1
-    command: >
-      celery -A street_politics worker
-      --loglevel=info
-      --concurrency=2
-      --hostname=worker1@%h
-      --logformat="%(asctime)s [%(processName)s:%(process)d] %(levelname)s %(message)s"
-    depends_on:
-      - redis
+    command: celery -A street_politics worker --loglevel=info --concurrency=2 --hostname=worker1@%h --logfile=/var/log/celery/worker1.log
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
-
+    volumes:
+      - celery_logs:/var/log/celery
+    deploy:
+      replicas: 1
+      
   celery_worker2:
     image: street_politics-django:latest
-    container_name: celery_worker2
-    command: >
-      celery -A street_politics worker
-      --loglevel=info
-      --concurrency=2
-      --hostname=worker2@%h
-      --logformat="%(asctime)s [%(processName)s:%(process)d] %(levelname)s %(message)s"
-    depends_on:
-      - redis
+    command: celery -A street_politics worker --loglevel=info --concurrency=2 --hostname=worker2@%h --logfile=/var/log/celery/worker2.log
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    volumes:
+      - celery_logs:/var/log/celery
+    deploy:
+      replicas: 1
+
+
