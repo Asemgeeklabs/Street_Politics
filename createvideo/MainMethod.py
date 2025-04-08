@@ -30,6 +30,7 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data,dir_path):
             if "x.com" in video_url:
                 download_twitter_video(url=video_url,output_path=local_filename)
             else:
+                print("not twitter")
                 # Perform the GET request and download the file
                 response = requests.get(video_url, stream=True)
                 response.raise_for_status()  # Check for HTTP errors
@@ -37,6 +38,7 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data,dir_path):
                     for chunk in response.iter_content(chunk_size=8192):  # Download in chunks
                         file.write(chunk)
             new_start_time = item["start_time"]
+            print(f"start time :{start_time_image}")
             total_duration, clips2, audio_clips = video_transition(local_filename, total_duration, clips2, new_start_time, audio_clips, w, h, speed ,video_index)
             video_index += 1
             remove_local_file(local_filename)
