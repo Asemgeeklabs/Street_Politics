@@ -14,7 +14,7 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data,dir_path):
     start_log_bg = body_list[0]["start_time"]
     print(f"start time logo:{start_log_bg}")
     ### create background video ###
-    bg_video = VideoFileClip("downloads/background.mp4")
+    bg_video = VideoFileClip("downloads/background.mp4") 
     w, h = bg_video.size
     speed = 800 
     total_duration = 0
