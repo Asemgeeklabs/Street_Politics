@@ -84,13 +84,13 @@ def image_transition(image_path, total_duration, clips, new_start_time, pause_du
     output_path_img = f"{dir_path}/processed_image{image_index}.png"
     if abs(image_width - image_height) > 50:
         if image_height > image_width:
-            mask_path = process_image_height(image_path, output_path_img, image_index=image_index,target_height=800)
+            mask_path = process_image_height(image_path, output_path_img, image_index=image_index,target_height=800,dir_path=dir_path)
             image_clip = ImageClip(output_path_img).with_duration(pause_duration).with_fps(30)
         else:
-            mask_path = process_image_width(image_path, output_path_img,image_index=image_index ,target_width=1000)
+            mask_path = process_image_width(image_path, output_path_img,image_index=image_index ,target_width=1000,dir_path=dir_path)
             image_clip = ImageClip(output_path_img).with_duration(pause_duration).with_fps(30)
     else:
-        mask_path = process_image_width(image_path, output_path_img, image_index=image_index,target_width=800)
+        mask_path = process_image_width(image_path, output_path_img, image_index=image_index,target_width=800,dir_path=dir_path)
         image_clip = ImageClip(output_path_img).with_duration(pause_duration).with_fps(30)
     #### define the start and center position ####
     start_position = ("center", 150)

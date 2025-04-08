@@ -24,6 +24,7 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data,dir_path):
     for item in body_list:
         try:
             video_url = item["url"]
+            print("found video url")
             local_filename = f"{dir_path}/video{video_index}.mp4"
             ## download vide ##
             if "x.com" in video_url:
@@ -39,7 +40,8 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data,dir_path):
             total_duration, clips2, audio_clips = video_transition(local_filename, total_duration, clips2, new_start_time, audio_clips, w, h, speed ,video_index)
             video_index += 1
             remove_local_file(local_filename)
-        except:
+        except Exception as e :
+            print(f"exception{e}")
             new_start_time = item["start_time"]
             audioPath = item["audioPath"]
             duration = item["duration"]

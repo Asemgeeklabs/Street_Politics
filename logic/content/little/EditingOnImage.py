@@ -97,7 +97,7 @@ def add_drop_shadow(image, offset=(10, 10), shadow_color=(0, 0, 0, 128), blur_ra
     return transparent_canvas
 
 ############ transparent round ############
-def add_transparent_layer(image_path, output_path, bordered_image_height , image_index ,canvas_width=1920, canvas_height=1080):
+def add_transparent_layer(image_path, output_path, bordered_image_height , image_index ,canvas_width=1920, canvas_height=1080,dir_path=None):
     # Open the original image
     image = Image.open(image_path).convert("RGBA")
     # Create a transparent canvas with the desired size
@@ -108,7 +108,7 @@ def add_transparent_layer(image_path, output_path, bordered_image_height , image
     # Paste the original image onto the transparent canvas
     canvas.paste(image, (x_offset, y_offset), image)
     ### extract mask  and save it as image ###
-    mask_path = f"downloads/extracted_mask{image_index}.png"
+    mask_path = f"{dir_path}/extracted_mask{image_index}.png"
     mask = canvas.split()[-1]
     mask = mask.convert("RGBA")
     mask.save(mask_path,format="PNG")
@@ -118,7 +118,7 @@ def add_transparent_layer(image_path, output_path, bordered_image_height , image
     return mask_path
 
 # Combined function
-def process_image_width(image_path, output_path, image_index,target_width=1080):
+def process_image_width(image_path, output_path, image_index,target_width=1080,dir_path=None):
     print("enetering process image width" )
     # Step 1: Open the image
     image = Image.open(image_path) 
@@ -129,11 +129,11 @@ def process_image_width(image_path, output_path, image_index,target_width=1080):
     final_image = add_drop_shadow(bordered_image, offset=(10, 20), shadow_color=(0, 0, 0, 180), blur_radius=7)
     # Step 4: Save the result
     final_image.save(output_path)
-    mask_path = add_transparent_layer(output_path, output_path,bordered_image_height= bordered_image.height,image_index=image_index)
+    mask_path = add_transparent_layer(output_path, output_path,bordered_image_height= bordered_image.height,image_index=image_index,dir_path=dir_path)
     return mask_path
 
 # Combined function
-def process_image_height(image_path, output_path, image_index,target_height=1080):
+def process_image_height(image_path, output_path, image_index,target_height=1080,dir_path=None):
     # Open the image with Pillow
     image = Image.open(image_path)
     
@@ -145,7 +145,7 @@ def process_image_height(image_path, output_path, image_index,target_height=1080
     
     # Step 4: Save the result
     final_image.save(output_path)
-    mask_path = add_transparent_layer(output_path, output_path,bordered_image_height= bordered_image.height,image_index=image_index)
+    mask_path = add_transparent_layer(output_path, output_path,bordered_image_height= bordered_image.height,image_index=image_index,dir_path=dir_path)
     return mask_path
 
 # Combined function

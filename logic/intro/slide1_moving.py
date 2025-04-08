@@ -22,13 +22,14 @@ def remove_local_file(file_path):
     except Exception as e:
         print(f"Error removing file {file_path}: {str(e)}")
 
-def add_audios(audios):
+def add_audios(audios,dir_path):
     ## audios creating ##
     list_audios = []
     ## looping on all audios ##
     i = 1
     for url , start in audios:
-        local_filename = f"downloads/audio{i}.mp3"
+        print(f'dir_path:{dir_path}')
+        local_filename = f"{dir_path}/audio{i}.mp3"
         response = requests.get(url, stream=True) 
         response.raise_for_status()  
         with open(local_filename, "wb") as file:
