@@ -42,7 +42,6 @@ services:
       --loglevel=info
       --concurrency=2
       --hostname=worker1@%h
-      --logformat="%(asctime)s [%(processName)s:%(process)d] %(levelname)s %(message)s"
     depends_on:
       - redis
     environment:
@@ -61,7 +60,6 @@ services:
       --loglevel=info
       --concurrency=2
       --hostname=worker2@%h
-      --logformat="%(asctime)s [%(processName)s:%(process)d] %(levelname)s %(message)s"
     depends_on:
       - redis
     environment:

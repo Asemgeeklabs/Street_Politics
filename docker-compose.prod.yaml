@@ -16,7 +16,7 @@ services:
 
   celery_worker1:
     image: street_politics-django:latest
-    command: celery -A street_politics worker --loglevel=info --concurrency=2 --hostname=worker1@%h --logfile=/var/log/celery/worker1.log
+    command: celery -A street_politics worker --loglevel=info --concurrency=2 --hostname=worker1@%h 
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -27,7 +27,7 @@ services:
       
   celery_worker2:
     image: street_politics-django:latest
-    command: celery -A street_politics worker --loglevel=info --concurrency=2 --hostname=worker2@%h --logfile=/var/log/celery/worker2.log
+    command: celery -A street_politics worker --loglevel=info --concurrency=2 --hostname=worker2@%h 
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
