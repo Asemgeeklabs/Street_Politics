@@ -38,8 +38,9 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data,dir_path):
                     for chunk in response.iter_content(chunk_size=8192):  # Download in chunks
                         file.write(chunk)
             new_start_time = item["start_time"]
-            print(f"start time :{start_time_image}")
-            total_duration, clips2, audio_clips = video_transition(local_filename, total_duration, clips2, new_start_time, audio_clips, w, h, speed ,video_index)
+            print(f"start time :{new_start_time}")
+            total_duration, clips2, audio_clips = video_transition(local_filename, total_duration, clips2, new_start_time, audio_clips, w, h, speed ,video_index,dir_path=dir_path)
+            print("done")
             video_index += 1
             remove_local_file(local_filename)
         except Exception as e :
