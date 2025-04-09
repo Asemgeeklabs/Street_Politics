@@ -40,7 +40,6 @@ services:
     command: >
       celery -A street_politics worker
       --loglevel=info
-      --concurrency=2
       --hostname=worker1@%h
     depends_on:
       - redis
@@ -58,7 +57,6 @@ services:
     command: >
       celery -A street_politics worker
       --loglevel=info
-      --concurrency=2
       --hostname=worker2@%h
     depends_on:
       - redis
