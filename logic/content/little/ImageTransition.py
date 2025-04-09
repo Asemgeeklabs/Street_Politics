@@ -131,7 +131,6 @@ def image_transition(image_path, total_duration, clips, new_start_time, pause_du
     return total_duration, clips
 
 def video_transition(video_path, total_duration, clips, new_start_time, audio_clips, w, h, speed,video_index,dir_path):
-    print(f"entering video transition video_{video_index}")
     output_video_path = f"{dir_path}/video_{video_index}.png"
     video_clip = VideoFileClip(video_path)
     pause_duration = video_clip.duration
@@ -141,20 +140,15 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
     audio_clips.append(audio)
     # Extract the first frame
     frame_width, frame_height = video_clip.w, video_clip.h
-    print("enerting process of video" )
     if frame_height > frame_width:
         video_clip = video_clip.resized(height=850)
         frame_width, frame_height = video_clip.w, video_clip.h
         frame_image = Image.new("RGBA", (frame_width, frame_height), (0, 0, 0, 0))
-        print(f"new image width after :{frame_image.width}")
-        print(f"new image height after:{frame_image.height}")
         frame_image.save(output_video_path)
         # frame_image = video_path
         
         process_video_height(output_video_path, output_video_path, target_height=850)
         frame_image = ImageClip(output_video_path)
-        print(f"new processed image width after :{frame_image.w}")
-        print(f"new processed image height after:{frame_image.h}")
         start_position = (721, (h /2)-300)
         shadow_position = (721-21, start_position[1]-12)
         shadow_center = (721-21, abs((h / 2) - (frame_image.h / 2))-13)
@@ -163,13 +157,9 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
         video_clip = video_clip.resized(height=850)
         frame_width, frame_height = video_clip.w, video_clip.h
         frame_image = Image.new("RGBA", (frame_width, frame_height), (0, 0, 0, 0))
-        print(f"new image width after :{frame_image.width}")
-        print(f"new image height after:{frame_image.height}")
         frame_image.save(output_video_path)
         process_video_height(output_video_path, output_video_path, target_height=850)
         frame_image = ImageClip(output_video_path)
-        print(f"new processed image width after :{frame_image.w}")
-        print(f"new processed image height after:{frame_image.h}")
         start_position = (535, (h /2)-300)
         center_position = (535, abs((h / 2) - (frame_image.h / 2)))
         shadow_position = (535-21, start_position[1]-12)
@@ -188,11 +178,8 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
         center_position = ("center", abs((h / 2) - (frame_image.h / 2)))
     distance_to_center = start_position[1] - center_position[1]
     time_to_center = distance_to_center / speed
-    print("animating the video")
     # animating shadow
     shadow = ImageClip(output_video_path)
-    print(f"shadow video height:{shadow.h}")
-    print(f"shadow video width:{shadow.w}")
     animated_shadow = (
     shadow 
     .with_start(new_start_time)
@@ -213,7 +200,6 @@ def video_transition(video_path, total_duration, clips, new_start_time, audio_cl
     animated_video = animated_video.with_effects([vfx.CrossFadeIn(0.2)])
     clips.append(animated_shadow)
     clips.append(animated_video)
-    print(animated_video.duration)
     total_duration += animated_video.duration
     ### remove local file ###
     remove_local_file(video_path)

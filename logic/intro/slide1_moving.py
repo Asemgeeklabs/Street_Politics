@@ -5,8 +5,6 @@ import requests
 ### recursion method for resizing ###
 def resize_height_recur(image,current_height):
     image = image.resized(height=current_height+100)
-    print(f"new height:{image.h}")
-    print(f"new width:{image.w}")
     if image.w < 1920:
         return resize_height_recur(image,(current_height+100))
     else:
@@ -16,7 +14,6 @@ def remove_local_file(file_path):
     try:
         if os.path.exists(file_path):
             os.remove(file_path)
-            print(f"Removed local file: {file_path}")
         else:
             print(f"File does not exist: {file_path}")
     except Exception as e:
@@ -28,7 +25,6 @@ def add_audios(audios,dir_path):
     ## looping on all audios ##
     i = 1
     for url , start in audios:
-        print(f'dir_path:{dir_path}')
         local_filename = f"{dir_path}/audio{i}.mp3"
         response = requests.get(url, stream=True) 
         response.raise_for_status()  
@@ -38,7 +34,6 @@ def add_audios(audios,dir_path):
         audio = AudioFileClip(local_filename)
         audio = audio.with_start(start)
         list_audios.append(audio)
-        print(local_filename)
         i += 1
         remove_local_file(local_filename) 
     return list_audios

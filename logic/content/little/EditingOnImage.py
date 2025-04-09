@@ -124,7 +124,6 @@ def process_image_width(image_path, output_path, image_index,target_width=1080,d
     image = Image.open(image_path) 
     # Step 2: Resize and add borders
     bordered_image = add_borders_and_resize_width(image, target_width=target_width)
-    print(bordered_image.width, bordered_image.height)
     # Step 3: Apply drop shadow
     final_image = add_drop_shadow(bordered_image, offset=(10, 20), shadow_color=(0, 0, 0, 180), blur_radius=7)
     # Step 4: Save the result
@@ -154,7 +153,6 @@ def process_video_width(image_path, output_path,target_width=1080):
     image = Image.open(image_path)
     # Step 2: Resize and add borders
     bordered_image = add_borders_and_resize_width(image, target_width=target_width)
-    print(bordered_image.width, bordered_image.height)
     # Step 3: Apply drop shadow
     final_image = add_drop_shadow(bordered_image, offset=(10, 20), shadow_color=(0, 0, 0, 180), blur_radius=7)
     # Step 4: Save the result

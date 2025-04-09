@@ -12,7 +12,6 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data,dir_path):
     clips2 = []
     ### start of back ground video and logo ###
     start_log_bg = body_list[0]["start_time"]
-    print(f"start time logo:{start_log_bg}")
     ### create background video ###
     bg_video = VideoFileClip("downloads/background.mp4") 
     w, h = bg_video.size
@@ -38,9 +37,7 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data,dir_path):
                     for chunk in response.iter_content(chunk_size=8192):  # Download in chunks
                         file.write(chunk)
             new_start_time = item["start_time"]
-            print(f"start time :{new_start_time}")
             total_duration, clips2, audio_clips = video_transition(local_filename, total_duration, clips2, new_start_time, audio_clips, w, h, speed ,video_index,dir_path=dir_path)
-            print("done")
             video_index += 1
             remove_local_file(local_filename)
         except Exception as e :
@@ -74,10 +71,7 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data,dir_path):
                 image_index += 1
                 del image_url , start_time_image
     ## modify the duration of background video ##
-    print(f"first total duration:{total_duration}")
     background_video_repeated = repeat_video(video=bg_video,total_duration=total_duration).with_start(start_log_bg-1)
-    print(f"back ground video duration:{background_video_repeated.duration}")
-    print(f"back ground start time :{background_video_repeated.start}")
     clips.insert(-2,background_video_repeated)
     ### add logo ###
     logo_image = ImageClip("downloads/logo.png").resized(width=150).with_position((1740,20)).with_duration(background_video_repeated.duration).with_start(start_log_bg)

@@ -1,11 +1,13 @@
-from celery import shared_task
+from celery import shared_task , Celery
 from logic.intro.intro_methods import *
 from .MainMethod import body
 from django.conf import settings
 from io import BytesIO
-import boto3, redis , os
+import boto3 , os
 from datetime import datetime
 
+
+app = Celery('street_politics', broker='redis://redis:6379/0')
 
 ### list of all slide methods ###
 methods_list = [Slide1,Slide2,Slide3,Slide4]
@@ -68,17 +70,16 @@ def bodytest(slides_list,body_list,webhook):
                 "metadata" : meta_data
             }
             requests.post(webhook_url, json=payload)
-            print(f"An error occurred while sending video notification: {e}")
-        
-        b = is_last_task()
+        b = should_shutdown()
+
     except Exception as e:
+        print(f"An error occurred while rendering video due to: {e}")
         payload = {
                 "status": "Failed",
                 "metadata" : meta_data
             }
         requests.post(webhook_url, json=payload)
-        print(f"An error occurred while rendering video due to: {e}")
-        b = is_last_task()
+        b = should_shutdown()
             
 
     
@@ -89,24 +90,43 @@ def shutdown_instance():
     ec2.stop_instances(InstanceIds=[instance_id])
     print(f"Instance {instance_id} is stopping.")
 
-def is_last_task(queue_name='celery', redis_host='redis', redis_port=6379, redis_db=0):
-    try:
-        # Connect to Redis
-        redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db)
+# def is_last_task(queue_name='celery', redis_host='redis', redis_port=6379, redis_db=0):
+#     try:
+#         # Connect to Redis
+#         redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db)
 
-        # Get the length of the queue
-        queue_length = redis_client.llen(queue_name)
+#         # Get the length of the queue
+#         queue_length = redis_client.llen(queue_name)
 
-        if queue_length == 0:
-            print("This is the last task. No tasks are waiting in the queue.")
-            shutdown_instance()
-            return True
+#         if queue_length == 0:
+#             print("This is the last task. No tasks are waiting in the queue.")
+#             shutdown_instance()
+#             return True
 
-    except Exception as e:
-        print(f"Error checking queue length: {e}")
-        return None
+#     except Exception as e:
+#         print(f"Error checking queue length: {e}")
+#         return None
 
+def should_shutdown():
+    i = app.control.inspect()
+    print(f"i:{i}")
+    
+    active_tasks = i.active()
+    print(f"active_tasks:{active_tasks}")
+    
+    if not active_tasks:
+        print("No active workers responded. Skipping shutdown.")
+        return False
 
+    # Check all workers for active tasks
+    for worker, tasks in active_tasks.items():
+        if tasks:
+            print(f"{worker} is still processing tasks: {tasks}")
+            return False
+
+    print("No active tasks on any worker. Safe to shut down.")
+    shutdown_instance()
+    return True
 
 @shared_task
 def testsss(image_url,text,duration):
