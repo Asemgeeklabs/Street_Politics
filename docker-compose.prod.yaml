@@ -16,7 +16,7 @@ services:
 
   celery_worker1:
     image: street_politics-django:latest
-    command: >
+    command: > 
       celery -A street_politics worker
       --loglevel=info
       --hostname=worker1@%h
