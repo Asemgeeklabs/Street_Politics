@@ -19,7 +19,6 @@ services:
     command: >
       celery -A street_politics worker
       --loglevel=info
-      --concurrency=2
       --hostname=worker1@%h
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
@@ -30,7 +29,6 @@ services:
     command: >
       celery -A street_politics worker
       --loglevel=info
-      --concurrency=2
       --hostname=worker2@%h
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
