@@ -14,26 +14,11 @@ services:
     ports:
       - "6379:6379"
 
-  celery_worker1:
+  celery:
     image: street_politics-django:latest
-    command: > 
-      celery -A street_politics worker
-      --loglevel=info
-      --hostname=worker1@%h
+    command: celery -A street_politics worker --autoscale=4,2 -P prefork --loglevel=info
+    depends_on:
+      - redis
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
-
-  celery_worker2:
-    image: street_politics-django:latest
-    command: >
-      celery -A street_politics worker
-      --loglevel=info
-      --hostname=worker2@%h
-    environment:
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-
-
-volumes:
-  celery_logs:
