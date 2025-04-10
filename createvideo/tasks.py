@@ -95,7 +95,6 @@ def should_shutdown():
     print(f"inspector:{inspector}")
     
     active_tasks = inspector.active()
-    print(f"active_tasks:{active_tasks}")
     
     if not active_tasks:
         print("No active workers responded. Skipping shutdown.")
