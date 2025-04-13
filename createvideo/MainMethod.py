@@ -23,13 +23,11 @@ def body(body_list,clips,audio_clips,video_name,webhook_url,meta_data,dir_path):
     for item in body_list:
         try:
             video_url = item["url"]
-            print("found video url")
             local_filename = f"{dir_path}/video{video_index}.mp4"
             ## download vide ##
             if "x.com" in video_url:
                 download_twitter_video(url=video_url,output_path=local_filename)
             else:
-                print("not twitter")
                 # Perform the GET request and download the file
                 response = requests.get(video_url, stream=True)
                 response.raise_for_status()  # Check for HTTP errors

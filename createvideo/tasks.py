@@ -104,7 +104,7 @@ def should_shutdown():
     # Check all workers for active tasks
     for worker, tasks in active_tasks.items():
         if tasks != []:
-            print(f"{worker} is still processing tasks: {tasks}")
+            print(f"{worker} is still processing tasks")
             return False
         
     print("No active tasks on any worker. Safe to shut down.")

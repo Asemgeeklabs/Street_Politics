@@ -16,7 +16,7 @@ services:
 
   celery:
     image: street_politics-django:latest
-    command: celery -A street_politics worker --autoscale=4,2 -P prefork --loglevel=info
+    command: celery -A street_politics worker --pool=solo --loglevel=info
     depends_on:
       - redis
     environment:
